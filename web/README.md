@@ -1,77 +1,79 @@
-# 3D 에셋 인터랙티브 씬
+# M1 TFT — 부유 에셋 씬
 
 3D 에셋이 화면에 둥둥 떠 있고, 마우스를 움직이는 방향으로 기울며 따라오는 웹 페이지.
 두 가지 버전이 들어 있다.
 
 | 파일 | 필요한 것 | 특징 |
 |------|-----------|------|
-| **`index.html`** | 캡처 이미지 (PNG/JPG) | 가볍고 즉시 동작. 여러 글리프 지원. 뒷면은 볼 수 없음 |
+| **`index.html`** | 투명 PNG | 가볍고 즉시 동작. 여러 글리프, 재질별 반응. 뒷면은 볼 수 없음 |
 | `model-3d.html` | GLB 모델 파일 | 진짜 3D. 마우스로 돌리면 뒷면까지 보임 |
 
-Tripo 무료 플랜에서 GLB 내보내기가 막히면 `index.html` 쪽을 쓰면 된다.
-나중에 GLB를 구하면 `model-3d.html` 로 넘어가면 되고, 두 파일은 서로 독립적이다.
+Tripo 무료 플랜에서 GLB 내보내기가 막히면 `index.html` 쪽을 쓴다.
+두 파일은 서로 독립적이다.
 
 ## 이미지 버전 (index.html)
 
-### 1. 이미지
+### 실행
 
-`web/images/` 에 M 과 숫자 1 이 들어 있다. 각각 Tripo 캡처 원본과,
-배경을 제거해 둔 `*-cutout.png` 가 한 쌍이다. 페이지는 cutout 쪽을 읽는다.
-
-배경 제거는 이미지 테두리에서 시작해 배경색과 비슷한 픽셀만 번져나가며
-지우는 방식(flood fill)이라, 에셋 **안쪽**에 같은 색이 있어도 남는다.
-M 은 강도 34, 1 은 24가 가장 깨끗했다.
-
-글리프를 추가하거나 바꾸는 방법은 `web/images/README.md` 에 있다.
-
-### 2. 실행
-
-배경 제거가 꺼져 있으므로 `index.html` 을 그냥 열면 된다.
-
-배경이 있는 새 캡처를 쓰려고 `removeBackground: true` 로 바꿨을 때만
-로컬 서버가 필요하다. 이미지 픽셀을 읽어야 하는데, 파일을 더블클릭해 열면
-브라우저 보안 정책이 이를 막기 때문이다.
+`index.html` 을 그냥 열면 된다. 서버가 필요 없다.
 
 ```bash
-cd web
+# 서버로 열고 싶으면
 python3 -m http.server 8000
-# 브라우저에서 http://localhost:8000
 ```
 
-### 3. 움직임 조절
+캔버스를 쓰지만 픽셀을 **읽지 않고 그리기만** 하므로 `file://` 에서도
+오염(`SecurityError`) 문제가 없다. 픽셀을 읽던 이전 버전(배경 자동 제거)은
+로컬 서버가 필요했는데, 지금 에셋은 원본이 이미 투명 PNG 라서 그 코드를 빼고
+캔버스는 합성에만 쓴다.
 
-`app.js` 상단 `CONFIG` 값만 바꾸면 된다.
+### 이미지
+
+`web/images/` 에 M(털)과 1(크롬)이 있다. 원본과, 글리프 경계에 맞춰 크롭한
+`*-cutout.png` 가 한 쌍이고 페이지는 cutout 을 읽는다. 자세한 규칙은
+`web/images/README.md` 참고.
+
+### 재질 반응
+
+정지 이미지 한 장이라 진짜 물리 시뮬레이션은 아니다. 다음 두 가지로 흉내낸다.
+
+**털 (`material: 'fur'`)** — 커서를 움직이면 진행 방향의 반대로 잔상을 흘린다.
+캔버스 `destination-over` 로 **실루엣 바깥에만** 깔리므로 몸통 질감은 그대로 남고
+털끝만 날리는 것처럼 보인다. 몸통도 `skewX` 로 살짝 기운다.
+
+**크롬 (`material: 'chrome'`)** — 커서 위치에 따라 하이라이트가 움직인다.
+캔버스 `source-atop` 이라 글리프 알파에 자동으로 잘린다. CSS `mask-image` 로
+같은 걸 하면 마스크가 안 먹는 환경에서 사각형이 새어 나온다(실제로 겪었다).
+
+| 값 (`MATERIALS`) | 의미 |
+|------|------|
+| `pad` | 잔상이 번질 여백. 이미지 높이 대비 비율 |
+| `fringeSteps` / `fringeAlpha` / `fringeBlur` | 잔상 겹수 · 진하기 · 흐림 |
+| `fringeReach` | 커서 속도에 비례해 잔상이 뻗는 거리(px) |
+| `fringeIdle` | 커서를 멈춰도 흔들리는 폭(px) |
+| `windDeg` | 커서 속도에 따라 몸통이 기우는 전단각(deg) |
+| `spec` / `specR` | 하이라이트 세기 · 반경(캔버스 폭 대비) |
+
+`pad` 를 늘리면 `app.css` 의 `.row { gap }` 음수값도 같이 조여야 자간이 맞는다.
+
+### 움직임
+
+`app.js` 의 `MOTION` 이 두 글리프의 공통 기준이다.
 
 | 값 | 의미 |
 |----|------|
-| `tiltX` / `tiltY` | 마우스 상하·좌우에 따라 기울어지는 각도(deg) |
+| `ease` | 커서를 따라오는 속도. 작을수록 느긋하다 (0.02~0.15) |
+| `tilt` | 최대 기울기(deg) |
+| `float` / `speed` | 부유 진폭과 속도 |
 | `driftX` / `driftY` | 마우스를 따라 이동하는 거리(px) |
-| `ease` | 따라오는 속도. 작을수록 느긋하고 부드럽다 (0.02~0.15) |
-| `floatAmp` / `floatSpeed` | 둥둥 떠다니는 진폭과 속도 |
 | `swayDeg` | 좌우로 흔들리는 각도 |
-| `speed` | 부유 속도 |
-| `removeBackground` | 배경 자동 제거 on/off (`*-cutout.png` 쓸 때는 off) |
 
-마우스 반응은 모든 글리프가 함께, 부유는 각자다. 글리프별 `phase` /
-`speedMul` / `ampMul` 로 위상과 주기를 어긋나게 두는데, 이 값을 같게 하면
-나란히 놓인 글리프들이 한 덩어리처럼 흔들려 어색해진다.
+글리프별 편차는 `GLYPHS` 에 있다. 마우스 반응은 모두 함께, 부유는 각자다.
+`phase` / `speedMul` / `ampMul` / `easeMul` / `tiltMul` / `driftMul` /
+`baseRotY` / `baseRotZ` / `scale` 을 글리프마다 다르게 줘야 한 덩어리처럼
+흔들리지 않는다.
 
-에셋 크기는 `app.css` 의 `--glyph-h`, 글리프 간격은 `.row` 의 `gap`,
-제목 문구는 각 HTML 의 `.wordmark` 에서 바꾼다.
-
-## GLB 버전 (model-3d.html)
-
-### Tripo 내보내기 설정
-
-| 항목 | 선택 |
-|------|------|
-| 포맷 | **GLB** (메시 + 재질 + 텍스처가 한 파일에 들어감) |
-| 텍스처 해상도 | **2k 권장**. 4k는 유료로 막히는 경우가 있고 로딩도 느리다 |
-
-내려받은 파일을 `web/models/model.glb` 로 저장하고 위와 같이 로컬 서버로 열면 된다.
-움직임 값은 `main.js` 상단 `CONFIG` 에 있다.
-
-three.js는 CDN(jsDelivr)에서 불러오므로 `npm install` 이 필요 없다.
+에셋 크기는 `app.css` 의 `--glyph-h`, 제목 문구는 `index.html` 의 `.wordmark`.
 
 ## 제목 서체
 
@@ -92,8 +94,15 @@ three.js는 CDN(jsDelivr)에서 불러오므로 `npm install` 이 필요 없다.
 }
 ```
 
+## GLB 버전 (model-3d.html)
+
+Tripo 에서 **GLB** 로 내보내(텍스처는 2k 권장) `web/models/model.glb` 로 저장하면
+동작한다. GLB 는 로컬 서버로 열어야 한다. 움직임 값은 `main.js` 상단 `CONFIG`.
+
+three.js 는 CDN(jsDelivr)에서 불러오므로 `npm install` 이 필요 없다.
+
 ## 공통 사항
 
 - 모바일에서는 터치 이동과 기기 기울기에도 반응한다.
-- OS의 "동작 줄이기(prefers-reduced-motion)" 설정을 켜면 부유 애니메이션이 멈춘다.
+- OS 의 "동작 줄이기(prefers-reduced-motion)" 설정을 켜면 부유·잔상이 멈춘다.
 - 배포는 `web/` 폴더를 GitHub Pages / Netlify / Vercel 에 그대로 올리면 된다.

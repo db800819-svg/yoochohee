@@ -1,218 +1,215 @@
 /* ==================================================================
  * 마우스를 따라 기울고 각자 둥둥 떠다니는 3D 에셋
  *
- * 3D 모델 파일 없이 캡처 이미지만으로 동작한다.
- * 글리프를 추가하려면 CONFIG.assets 에 한 줄 더 넣으면 된다.
+ * 3D 모델 파일 없이 투명 PNG 만으로 동작한다. 재질에 따라 커서 반응이
+ * 다르다 — 털은 실루엣 밖으로 잔상이 날리고, 크롬은 하이라이트가 움직인다.
+ *
+ * 조절할 곳
+ *   MOTION    : 두 글리프가 공유하는 기본 움직임
+ *   MATERIALS : 재질별 반응 (털 날림 / 금속 반짝임)
+ *   GLYPHS    : 글리프 목록과 개별 편차
  * ================================================================== */
 
-const CONFIG = {
-  /* 화면에 나란히 놓을 글리프.
-
-     글리프별 편차 — 값을 같게 두면 여러 오브젝트가 한 덩어리처럼
-     움직여 어색해진다. 각자 떠 있는 느낌은 이 값들에서 나온다.
-       phase / speedMul / ampMul : 부유 위상·주기·진폭
-       easeMul                   : 커서를 따라오는 속도 (작을수록 늦게 따라옴)
-       tiltMul / driftMul        : 마우스 반응의 크기
-       baseRotY / baseRotZ       : 가만히 있을 때의 기본 각도 (deg)
-       scale                     : 크기 미세 보정 */
-  assets: [
-    // M — 기준
-    { url: './images/asset-cutout.png',
-      alt: '파란 털 질감의 M 형태 3D 에셋',
-      phase: 0.0, speedMul: 1.00, ampMul: 1.00,
-      easeMul: 1.00, tiltMul: 1.00, driftMul: 1.00,
-      baseRotY: -5, baseRotZ: -1.5, scale: 1.00 },
-
-    // 1 — 더 느리게 따라오고, 덜 기울고, 기본 각도부터 다르다
-    { url: './images/asset-1-cutout.png',
-      alt: '파란 얼룩무늬 크롬 재질의 숫자 1 형태 3D 에셋',
-      phase: 2.1, speedMul: 0.84, ampMul: 1.24,
-      easeMul: 0.55, tiltMul: 0.58, driftMul: 0.72,
-      baseRotY: 10, baseRotZ: 2.5, scale: 1.02 },
-  ],
-
-  /* 배경 제거 — 스크린샷의 단색 배경을 투명하게 만든다.
-     현재 에셋은 원본이 이미 투명 PNG 라서 꺼 두었고,
-     덕분에 index.html 을 더블클릭해서 열어도 동작한다.
-
-     배경이 있는 캡처를 쓸 때만 true 로 바꾸고 로컬 서버로 연다.
-     단, 털처럼 경계가 부드러운 에셋에는 쓰지 말 것 — flood fill 은
-     반투명한 털끝을 뭉갠다. 그런 에셋은 투명 PNG 로 받아야 한다.
-     tolerance: 클수록 과감하게 지운다. */
-  removeBackground: false,
-  tolerance: 30,
-
-  /* 움직임 */
-  ease: 0.07,      // 커서를 따라오는 속도 (작을수록 느긋함)
-  tilt: 15,        // 최대 기울기 (deg)
-  float: 16,       // 부유 진폭 (px)
-  driftX: 34,      // 마우스 좌우 → 이동 (px)
-  driftY: 22,      // 마우스 상하 → 이동 (px)
-  swayDeg: 1.6,    // 좌우로 살짝 흔들리는 각도 (deg)
-  speed: 0.8,      // 부유 속도
-};
-
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 const root = document.documentElement;
 const row = document.getElementById('row');
-const notice = document.getElementById('notice');
 
-function showNotice(html) {
-  notice.innerHTML = html;
-  notice.hidden = false;
-}
+/* ============================================================
+ * 움직임 — 두 글리프가 공유하는 기준값
+ * ============================================================ */
+const MOTION = {
+  ease: 0.07,       // 커서를 따라오는 속도 (작을수록 느긋함)
+  tilt: 15,         // 최대 기울기 (deg)
+  float: 16,        // 부유 진폭 (px)
+  driftX: 34,
+  driftY: 22,
+  swayDeg: 1.6,
+  speed: 0.8,
+};
 
-/* ------------------------------------------------------------------
- * 배경 제거
+/* ============================================================
+ * 재질 — 커서에 반응하는 방식이 재질마다 다르다
  *
- * 테두리에서 시작해 배경색과 비슷한 픽셀을 번져나가며(flood fill)
- * 지운다. 색만 보고 지우는 방식과 달리, 에셋 안쪽에 배경과 같은
- * 색이 있어도 살아남는다.
+ * fringe : 실루엣 "밖"으로 흘리는 잔상. 몸통은 건드리지 않으므로
+ *          털이 뭉개지지 않고 털끝만 날리는 것처럼 보인다.
+ * spec   : 캔버스 source-atop 하이라이트. 알파에 자동으로 잘려서
+ *          CSS 마스크와 달리 사각형이 새어 나올 수 없다.
+ * ============================================================ */
+const MATERIALS = {
+  fur: {
+    pad: 0.09,           // 잔상이 번질 여백 (이미지 높이 대비)
+    fringeSteps: 5,      // 잔상 겹수
+    fringeReach: 44,     // 커서 속도 1 당 잔상이 뻗는 거리 (px)
+    fringeIdle: 3.2,     // 가만히 있을 때도 흔들리는 폭 (px)
+    fringeAlpha: 0.5,    // 잔상 진하기
+    fringeBlur: 3,       // 잔상 흐림 (px)
+    windDeg: 7,          // 커서 속도에 따라 기우는 전단각 (deg)
+    spec: 0.16,          // 하이라이트 세기
+    specR: 0.62,         // 하이라이트 반경 (캔버스 폭 대비)
+  },
+  chrome: {
+    pad: 0.02,
+    fringeSteps: 0,      // 매끈한 재질이라 잔상 없음
+    fringeReach: 0,
+    fringeIdle: 0,
+    fringeAlpha: 0,
+    fringeBlur: 0,
+    windDeg: 0,
+    spec: 0.62,          // 크롬은 하이라이트가 백색으로 터진다
+    specR: 0.26,         // 좁고 날카롭게
+  },
+};
+
+/* ============================================================
+ * 글리프 정의
  *
- * 반환값
- *   문자열 — 배경을 지운 data URL
- *   null   — 지울 필요가 없음 (이미 투명 배경)
- *   false  — 픽셀을 읽을 수 없음 (캔버스 오염). 원본을 그대로 써야 한다.
- * ------------------------------------------------------------------ */
-function cutOutBackground(img, tolerance) {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
-  if (!w || !h) return null;
+ * 글리프별 편차 — 값을 같게 두면 한 덩어리처럼 움직여 어색해진다.
+ * ============================================================ */
+const GLYPHS = [
+  { src: './images/asset-cutout.png', alt: '파란 털 질감의 M 형태 3D 에셋', material: 'fur',
+    phase: 0.0, speedMul: 1.00, ampMul: 1.00,
+    easeMul: 1.00, tiltMul: 1.00, driftMul: 1.00,
+    baseRotY: -5, baseRotZ: -1.5, scale: 1.00 },
 
-  const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  ctx.drawImage(img, 0, 0);
+  { src: './images/asset-1-cutout.png', alt: '파란 얼룩무늬 크롬 재질의 숫자 1 형태 3D 에셋', material: 'chrome',
+    phase: 2.1, speedMul: 0.84, ampMul: 1.24,
+    easeMul: 0.55, tiltMul: 0.58, driftMul: 0.72,
+    baseRotY: 10, baseRotZ: 2.5, scale: 1.02 },
+];
 
-  let image;
-  try {
-    image = ctx.getImageData(0, 0, w, h);
-  } catch (err) {
-    return false;   // file:// 로 열면 여기로 온다
-  }
-  const px = image.data;
+// ctx.filter 은 아직 브라우저마다 다르다 — 없으면 잔상을 흐림 없이 그린다
+const canBlur = (() => {
+  const c = document.createElement('canvas').getContext('2d');
+  return !!c && 'filter' in c;
+})();
 
-  const corners = [0, (w - 1) * 4, (h - 1) * w * 4, (h * w - 1) * 4];
-  if (corners.every((i) => px[i + 3] < 12)) return null;
+const slots = GLYPHS.map((g) => {
+  const mat = MATERIALS[g.material];
 
-  let br = 0, bg = 0, bb = 0;
-  for (const i of corners) { br += px[i]; bg += px[i + 1]; bb += px[i + 2]; }
-  br /= 4; bg /= 4; bb /= 4;
-
-  const tol2 = tolerance * tolerance * 3;
-  const dist2 = (i) => {
-    const dr = px[i] - br, dg = px[i + 1] - bg, db = px[i + 2] - bb;
-    return dr * dr + dg * dg + db * db;
-  };
-
-  const seen = new Uint8Array(w * h);
-  const isBg = new Uint8Array(w * h);
-  const stack = [];
-
-  const push = (x, y) => {
-    const p = y * w + x;
-    if (seen[p]) return;
-    seen[p] = 1;
-    if (dist2(p * 4) <= tol2) stack.push(p);
-  };
-
-  for (let x = 0; x < w; x++) { push(x, 0); push(x, h - 1); }
-  for (let y = 0; y < h; y++) { push(0, y); push(w - 1, y); }
-
-  while (stack.length) {
-    const p = stack.pop();
-    isBg[p] = 1;
-    const x = p % w;
-    const y = (p - x) / w;
-    if (x > 0) push(x - 1, y);
-    if (x < w - 1) push(x + 1, y);
-    if (y > 0) push(x, y - 1);
-    if (y < h - 1) push(x, y + 1);
-  }
-
-  // 경계를 부드럽게: 배경과 맞닿은 픽셀은 배경색에 가까운 만큼 반투명하게
-  for (let p = 0; p < w * h; p++) {
-    if (isBg[p]) { px[p * 4 + 3] = 0; continue; }
-    const x = p % w;
-    const y = (p - x) / w;
-    const edge =
-      (x > 0 && isBg[p - 1]) || (x < w - 1 && isBg[p + 1]) ||
-      (y > 0 && isBg[p - w]) || (y < h - 1 && isBg[p + w]);
-    if (!edge) continue;
-    const d = Math.sqrt(dist2(p * 4));
-    const a = Math.min(1, Math.max(0, (d - tolerance) / tolerance));
-    px[p * 4 + 3] = Math.round(px[p * 4 + 3] * a);
-  }
-
-  ctx.putImageData(image, 0, 0);
-  return canvas.toDataURL('image/png');
-}
-
-/* ------------------------------------------------------------------
- * 글리프 만들기
- * ------------------------------------------------------------------ */
-const slots = CONFIG.assets.map((asset) => {
   const slot = document.createElement('div');
   slot.className = 'slot';
   slot.innerHTML =
     '<div class="cast" aria-hidden="true"></div>' +
-    '<div class="floaty"><div class="glyph">' +
-    '<img alt="" draggable="false" />' +
-    '</div></div>';
+    '<div class="floaty"><div class="glyph"><canvas></canvas></div></div>';
   row.appendChild(slot);
 
-  const img = slot.querySelector('img');
-  img.alt = asset.alt || '';
+  const canvas = slot.querySelector('canvas');
+  canvas.setAttribute('role', 'img');
+  canvas.setAttribute('aria-label', g.alt);
+  const ctx = canvas.getContext('2d');
 
-  function apply(url) {
-    img.src = url;
-    img.classList.add('is-ready');
-  }
-
-  const probe = new Image();
-  probe.onload = () => {
-    let url = asset.url;
-    if (CONFIG.removeBackground) {
-      const cut = cutOutBackground(probe, CONFIG.tolerance);
-      if (typeof cut === 'string') {
-        url = cut;
-      } else if (cut === false) {
-        showNotice(
-          '배경을 자동으로 지우지 못했습니다. ' +
-          '<code>python3 -m http.server</code> 같은 로컬 서버로 열어주세요. ' +
-          '(파일을 더블클릭해 열면 브라우저가 이미지 분석을 차단합니다.)'
-        );
-      }
-    }
-    apply(url);
-  };
-  probe.onerror = () => {
-    slot.remove();
-    showNotice(`이미지를 찾을 수 없습니다: <code>${asset.url}</code>`);
-  };
-  probe.src = asset.url;
-
-  return {
+  const s = {
     floaty: slot.querySelector('.floaty'),
     cast: slot.querySelector('.cast'),
+    canvas, ctx, mat,
+    img: null,
+    soft: null,   // 잔상용 흐린 사본 (로드 시 1회 생성)
+    pad: 0,
     cur: { x: 0, y: 0 },   // 글리프마다 따로 감쇠 → 반응이 어긋나 각자 움직인다
-    phase: asset.phase || 0,
-    speedMul: asset.speedMul ?? 1,
-    ampMul: asset.ampMul ?? 1,
-    easeMul: asset.easeMul ?? 1,
-    tiltMul: asset.tiltMul ?? 1,
-    driftMul: asset.driftMul ?? 1,
-    baseRotY: asset.baseRotY ?? 0,
-    baseRotZ: asset.baseRotZ ?? 0,
-    scale: asset.scale ?? 1,
+    vel: { x: 0, y: 0 },   // 커서를 얼마나 뒤쫓고 있는지 = 체감 속도
+    ...g,
   };
+
+  const img = new Image();
+  img.onload = () => {
+    s.img = img;
+    s.pad = Math.round(img.naturalHeight * mat.pad);
+    canvas.width = img.naturalWidth + s.pad * 2;
+    canvas.height = img.naturalHeight + s.pad * 2;
+    // 여백이 붙어도 글리프 자체 크기는 --glyph-h 를 유지하도록 보정
+    const grow = canvas.height / img.naturalHeight;
+    canvas.style.height = `calc(var(--glyph-h) * ${grow.toFixed(4)})`;
+
+    /* 잔상용 흐린 사본을 여기서 한 번만 만든다.
+       매 프레임 ctx.filter 로 블러를 걸면 겹수만큼 비용이 붙어
+       프레임이 떨어진다. */
+    if (mat.fringeSteps > 0 && mat.fringeBlur > 0 && canBlur) {
+      const off = document.createElement('canvas');
+      off.width = canvas.width;
+      off.height = canvas.height;
+      const octx = off.getContext('2d');
+      octx.filter = `blur(${mat.fringeBlur}px)`;
+      octx.drawImage(img, s.pad, s.pad);
+      s.soft = off;
+    }
+  };
+  img.src = g.src;
+
+  return s;
 });
 
-/* ------------------------------------------------------------------
- * 포인터 입력 — 화면 중심 기준 -1 ~ 1
- * ------------------------------------------------------------------ */
+/* ============================================================
+ * 글리프 한 장 그리기
+ * ============================================================ */
+function paint(s, t) {
+  if (!s.img) return;
+  const { ctx, canvas, mat, img, pad } = s;
+  const W = canvas.width, H = canvas.height;
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.filter = 'none';
+
+  // 1) 몸통 — 원본 그대로. 이 위에 아무것도 덧그리지 않아 질감이 살아 있다.
+  ctx.drawImage(img, pad, pad);
+
+  // 2) 잔상 — 실루엣 밖에만 남도록 destination-over 로 "뒤에" 깐다
+  if (mat.fringeSteps > 0 && !reduceMotion) {
+    const speed = Math.hypot(s.vel.x, s.vel.y);
+    // 여백(pad)을 넘으면 잔상이 직선으로 잘려 보이므로 속도를 1 로 묶는다
+    const reach = Math.min(speed, 1) * mat.fringeReach;
+
+    // 커서가 멈춰 있어도 천천히 흔들린다
+    const idleX = Math.sin(t * 1.7 + s.phase) * mat.fringeIdle;
+    const idleY = Math.cos(t * 1.3 + s.phase) * mat.fringeIdle * 0.6;
+
+    // 털은 진행 방향의 반대로 끌린다
+    const dirX = speed > 0.001 ? -s.vel.x / speed : 0;
+    const dirY = speed > 0.001 ? -s.vel.y / speed : 0;
+
+    // 흐린 사본은 이미 pad 만큼 옮겨 그려져 있으므로 기준점이 0 이다
+    const src = s.soft || img;
+    const baseX = s.soft ? 0 : pad;
+    const baseY = s.soft ? 0 : pad;
+
+    ctx.globalCompositeOperation = 'destination-over';
+
+    for (let i = 1; i <= mat.fringeSteps; i++) {
+      const k = i / mat.fringeSteps;
+      ctx.globalAlpha = mat.fringeAlpha * (1 - k) ** 1.4;
+      ctx.drawImage(
+        src,
+        baseX + dirX * reach * k + idleX * k,
+        baseY + dirY * reach * k + idleY * k
+      );
+    }
+
+    ctx.globalAlpha = 1;
+  }
+
+  // 3) 하이라이트 — source-atop 이라 글리프 알파 안쪽에만 칠해진다
+  if (mat.spec > 0) {
+    const cx = W * (0.5 + s.cur.x * 0.42);
+    const cy = H * (0.5 + s.cur.y * 0.42);
+    const r = W * mat.specR;
+
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    grad.addColorStop(0, `rgba(255,255,255,${mat.spec})`);
+    grad.addColorStop(0.32, `rgba(226,238,255,${mat.spec * 0.3})`);
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+}
+
+/* ============================================================
+ * 포인터
+ * ============================================================ */
 const target = { x: 0, y: 0 };
 const current = { x: 0, y: 0 };
 
@@ -223,69 +220,73 @@ function setPointer(clientX, clientY) {
 
 window.addEventListener('pointermove', (e) => setPointer(e.clientX, e.clientY), { passive: true });
 window.addEventListener('touchmove', (e) => {
-  const t = e.touches[0];
-  if (t) setPointer(t.clientX, t.clientY);
+  const p = e.touches[0];
+  if (p) setPointer(p.clientX, p.clientY);
 }, { passive: true });
-
-// 커서가 창을 벗어나면 천천히 제자리로
 document.addEventListener('mouseleave', () => { target.x = 0; target.y = 0; });
 
-// 모바일: 기기 기울기에도 반응 (권한이 필요한 환경에서는 그냥 무시된다)
+// 모바일: 기기 기울기에도 반응
 window.addEventListener('deviceorientation', (e) => {
   if (e.gamma == null || e.beta == null) return;
   target.x = Math.max(-1, Math.min(1, e.gamma / 35));
   target.y = Math.max(-1, Math.min(1, (e.beta - 45) / 35));
 }, { passive: true });
 
-/* ------------------------------------------------------------------
+/* ============================================================
  * 렌더 루프
- * ------------------------------------------------------------------ */
+ * ============================================================ */
 const start = performance.now();
 
 function frame(now) {
   const t = (now - start) / 1000;
 
-  // 배경·워드마크용 기준 좌표 (첫 글리프와 같은 속도)
-  const ease = reduceMotion ? 1 : CONFIG.ease;
+  // 배경·워드마크용 기준 좌표
+  const ease = reduceMotion ? 1 : MOTION.ease;
   current.x += (target.x - current.x) * ease;
   current.y += (target.y - current.y) * ease;
-
   root.style.setProperty('--mx', current.x.toFixed(4));
   root.style.setProperty('--my', current.y.toFixed(4));
 
   for (const s of slots) {
     // 글리프마다 감쇠 속도가 달라 커서를 따라오는 타이밍이 어긋난다
-    const e = reduceMotion ? 1 : CONFIG.ease * s.easeMul;
-    s.cur.x += (target.x - s.cur.x) * e;
-    s.cur.y += (target.y - s.cur.y) * e;
+    const e = reduceMotion ? 1 : MOTION.ease * s.easeMul;
+    // 목표까지 남은 거리 = 체감 속도. 커서를 멈추면 자연히 0 으로 잦아든다.
+    s.vel.x = target.x - s.cur.x;
+    s.vel.y = target.y - s.cur.y;
+    s.cur.x += s.vel.x * e;
+    s.cur.y += s.vel.y * e;
 
-    const amp = reduceMotion ? 0 : CONFIG.float * s.ampMul;
-    const w = CONFIG.speed * s.speedMul;
+    const amp = reduceMotion ? 0 : MOTION.float * s.ampMul;
+    const w = MOTION.speed * s.speedMul;
     const bobY = Math.sin(t * w + s.phase) * amp;
     const bobX = Math.cos(t * w * 0.7 + s.phase) * amp * 0.35;
-    const sway = reduceMotion ? 0 : Math.sin(t * w * 0.5 + s.phase) * CONFIG.swayDeg;
+    const sway = reduceMotion ? 0 : Math.sin(t * w * 0.5 + s.phase) * MOTION.swayDeg;
 
-    const dx = s.cur.x * CONFIG.driftX * s.driftMul + bobX;
-    const dy = s.cur.y * CONFIG.driftY * s.driftMul + bobY;
-    const rx = -s.cur.y * CONFIG.tilt * 0.73 * s.tiltMul;
-    const ry = s.cur.x * CONFIG.tilt * s.tiltMul + s.baseRotY;
+    const dx = s.cur.x * MOTION.driftX * s.driftMul + bobX;
+    const dy = s.cur.y * MOTION.driftY * s.driftMul + bobY;
+    const rx = -s.cur.y * MOTION.tilt * 0.73 * s.tiltMul;
+    const ry = s.cur.x * MOTION.tilt * s.tiltMul + s.baseRotY;
     const rz = sway + s.baseRotZ;
+    // 털은 움직이는 방향으로 몸통까지 살짝 기운다 (바람 맞은 것처럼)
+    const skew = reduceMotion ? 0 : -s.vel.x * s.mat.windDeg;
 
     s.floaty.style.transform =
       `translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0)` +
       ` rotateX(${rx.toFixed(2)}deg)` +
       ` rotateY(${ry.toFixed(2)}deg)` +
       ` rotateZ(${rz.toFixed(2)}deg)` +
+      ` skewX(${skew.toFixed(2)}deg)` +
       ` scale(${s.scale})`;
 
     // 뜨는 높이: 0(가장 높음) ~ 1(가장 낮음). 그림자는 반대로 반응한다.
     const lift = amp > 0 ? (bobY + amp) / (amp * 2) : 0.5;
-
     s.cast.style.transform =
       `translateX(-50%)` +
       ` translate(${(-s.cur.x * 20 - bobX * 0.6).toFixed(2)}px, ${(s.cur.y * 6).toFixed(2)}px)` +
       ` scale(${(0.8 + lift * 0.22).toFixed(3)})`;
     s.cast.style.opacity = (0.3 + lift * 0.28).toFixed(3);
+
+    paint(s, t);
   }
 
   requestAnimationFrame(frame);
