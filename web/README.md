@@ -96,6 +96,25 @@ Node가 있으면 `npx serve web` 도 동일하다.
 
 three.js는 CDN(jsDelivr)에서 불러오므로 `npm install` 이 필요 없다.
 
+## 제목 서체
+
+`M1 TFT` 워드마크는 **Montserrat** 로 그린다. 원래 요청은 고담(Gotham)이었지만
+고담은 Hoefler & Co. 의 유료 상업 서체라 Google Fonts 에 없고, 라이선스 없이
+웹에 올릴 수 없다. Montserrat 은 고담 대체로 가장 널리 쓰이는 무료 서체다.
+
+고담 라이선스(웹폰트 키트)를 보유했다면 폰트 파일을 `web/fonts/` 에 넣고
+`app.css` 위쪽에 아래를 추가한 뒤, `.wordmark` 의 `font-family` 맨 앞을
+`"Gotham"` 으로 바꾸면 된다.
+
+```css
+@font-face {
+  font-family: "Gotham";
+  src: url("./fonts/Gotham-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+```
+
 ## 공통 사항
 
 - 모바일에서는 터치 이동과 기기 기울기에도 반응한다.
