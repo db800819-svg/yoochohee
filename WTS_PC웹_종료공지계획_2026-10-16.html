@@ -305,11 +305,12 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 
 /* ── 세로 타임라인 : 레일·아이콘은 영역 최좌측, 헤더는 상세 박스 위에 적층 ── */
 .tl{position:relative}
-.tlmonth{margin-left:40px;padding:32px 0 11px;font-size:24.5px;font-weight:800;
-  letter-spacing:-.025em;color:var(--ink);border-bottom:2px solid var(--ink)}
-.tlmonth:first-child{padding-top:2px}
-.tlgrp{position:relative}
-.tlgrp:before{content:"";position:absolute;left:8px;top:30px;bottom:0;width:1px;background:var(--line)}
+.tlmon{border:1px solid var(--line);border-radius:2px;background:var(--paper);margin-bottom:24px}
+.tlmon:last-child{margin-bottom:0}
+.tlmonth{background:var(--wash);border-bottom:1px solid var(--line);padding:13px 22px;
+  font-size:21.5px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.tlgrp{position:relative;padding:0 22px}
+.tlgrp:before{content:"";position:absolute;left:30px;top:30px;bottom:0;width:1px;background:var(--line)}
 .tlgrp .tlrow:last-child:after{content:"";position:absolute;left:0;top:38px;bottom:0;
   width:18px;background:var(--paper)}
 .tlrow{position:relative;padding:22px 0 26px 40px}
@@ -346,7 +347,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
 
 @media (max-width:900px){
   .tlrow{padding-left:32px}
-  .tlmonth{margin-left:32px;font-size:21.5px}
+  .tlmonth{padding:12px 16px;font-size:18px}
+  .tlgrp{padding:0 16px}
+  .tlgrp:before{left:24px}
   .tlrow + .tlrow:before{left:32px}
 }
 @media print{.tlrow{break-inside:avoid}}
@@ -448,6 +451,7 @@ ul.acts li b{color:var(--ink);font-weight:700}
       <h3>주 단위 실행 일정</h3>
       <p class="h3note">각 주는 월요일 시작 기준이며, 보조 표기는 해당 주 목요일이 속한 달의 주차</p>
       <div class="tl">
+      <div class="tlmon">
         <div class="tlmonth">9월</div>
         <div class="tlgrp">
         <div class="tlrow hard">
@@ -534,6 +538,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
           </details>
         </div>
         </div>
+      </div>
+      <div class="tlmon">
         <div class="tlmonth">10월</div>
         <div class="tlgrp">
         <div class="tlrow">
@@ -674,6 +680,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
           </details>
         </div>
         </div>
+      </div>
+      <div class="tlmon">
         <div class="tlmonth">11월</div>
         <div class="tlgrp">
         <div class="tlrow">
@@ -696,6 +704,7 @@ ul.acts li b{color:var(--ink);font-weight:700}
           </details>
         </div>
         </div>
+      </div>
       </div>
     </div>
 
