@@ -303,28 +303,31 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 /* ══════════ 문서별 추가 (토큰만 사용) ══════════ */
 .stepcol .when{font-size:14.5px;font-weight:600;color:var(--mute);line-height:1.45}
 
-/* ── 세로 타임라인 ── */
+/* ── 세로 타임라인 : 레일·아이콘은 영역 최좌측, 헤더는 상세 박스 위에 적층 ── */
 .tl{position:relative}
-.tl:before{content:"";position:absolute;left:208px;top:30px;bottom:0;width:1px;background:var(--line)}
-.tlrow{display:grid;grid-template-columns:208px 1fr;position:relative}
+.tl:before{content:"";position:absolute;left:8px;top:30px;bottom:0;width:1px;background:var(--line)}
+.tlrow{position:relative;padding:22px 0 26px 40px}
 .tlrow + .tlrow{border-top:1px solid var(--line)}
-.tmark{position:absolute;left:200.5px;top:22px;width:16px;height:16px;line-height:0;
+.tlrow:last-child:after{content:"";position:absolute;left:0;top:38px;bottom:0;
+  width:18px;background:var(--paper)}
+.tmark{position:absolute;left:0.5px;top:22px;width:16px;height:16px;line-height:0;
   color:var(--ink);background:var(--paper);border-radius:50%}
 .tmark svg{display:block;width:100%;height:100%}
 .tlrow.hard .tmark,.tlrow.dday .tmark{color:var(--after)}
-.tlrow.dday .tmark{left:199px;top:20.5px;width:19px;height:19px}
-.tlrow:last-child .c:after{content:"";position:absolute;left:-5px;top:35px;bottom:0;
-  width:11px;background:var(--paper)}
-.tlrow .k{padding:22px 30px 26px 0;text-align:right}
+.tlrow.dday .tmark{left:-1px;top:20.5px;width:19px;height:19px}
+
+.tlrow .k{text-align:right;margin-bottom:16px}
 .tlrow .k .w{font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.38;color:var(--ink)}
 .tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
-.tlrow .k h4{font-size:16px;font-weight:800;letter-spacing:-.01em;line-height:1.42;margin:9px 0 0;color:var(--ink)}
-.tlrow .k h4 .grade{display:inline-block;margin:7px 0 0;vertical-align:top}
-.tlrow .k .mw{font-size:14.5px;font-weight:600;color:var(--mute);margin-top:8px;line-height:1.45}
-.tlrow .c{position:relative;padding:22px 0 26px 30px}
-.tlrow .c .dgrp{margin-bottom:15px}
-.tlrow .c .dgrp:last-of-type{margin-bottom:0}
-.tlrow .c .dhd{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:6px}
+.tlrow .k h4{font-size:18px;font-weight:800;letter-spacing:-.015em;line-height:1.4;margin:7px 0 0;color:var(--ink)}
+.tlrow .k h4 .grade{margin:0 0 0 10px;vertical-align:2px}
+.tlrow .k .mw{font-size:14.5px;font-weight:600;color:var(--mute);margin-top:7px;line-height:1.45}
+
+.tlrow .item>summary{padding:13px 16px;font-size:16px}
+.tlrow .idet{padding:16px 18px 18px}
+.tlrow .dgrp{margin-bottom:15px}
+.tlrow .dgrp:last-of-type{margin-bottom:0}
+.tlrow .dhd{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:6px}
 
 /* ── 하이픈 불릿 목록 (.assume ul.rep 와 동일 형태) ── */
 ul.acts{list-style:none;margin:0;padding:0;font-size:16px;color:var(--ink-2)}
@@ -332,19 +335,11 @@ ul.acts li{position:relative;padding-left:15px;margin-bottom:7px;line-height:1.6
 ul.acts li:last-child{margin-bottom:0}
 ul.acts li:before{content:"–";position:absolute;left:0;top:0;color:var(--mute);font-weight:700}
 ul.acts li b{color:var(--ink);font-weight:700}
-ul.acts li b{color:var(--ink);font-weight:700}
 
 @media (max-width:900px){
-  .tl:before{left:8px}
-  .tlrow{grid-template-columns:1fr}
-  .tmark{left:0.5px;top:20px}
-  .tlrow.dday .tmark{left:-1px;top:18.5px}
-  .tlrow .k{text-align:left;padding:20px 0 8px 32px}
-  .tlrow .c{padding:0 0 24px 32px}
-  .tlrow:last-child .c:after{left:0;top:0;bottom:0;width:18px}
+  .tlrow{padding-left:32px}
+  .tlrow .k{text-align:left}
 }
-.tlrow .c .item>summary{padding:13px 16px;font-size:16px}
-.tlrow .c .idet{padding:16px 18px 18px}
 @media print{.tlrow{break-inside:avoid}}
 </style>
 
@@ -376,10 +371,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
       <h3>단계 구성</h3>
       <p class="h3note">기준일(09.04)부터 사후 결과 보고(11.16)까지 73일</p>
       <div class="steps">
-        <div class="step current">
+        <div class="step">
           <div class="stepcol">
             <span class="stepnum">0단계</span>
-            <span class="nowmark">현재 단계</span>
             <span class="when">09.04 ~ 09.10</span>
           </div>
           <div>
@@ -420,7 +414,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
         <div class="step">
           <div class="stepcol">
             <span class="stepnum">4단계</span>
-            <span class="when">10.16<br>D−Day</span>
+            <span class="stepwhen">D−Day</span>
+            <span class="when">10.16</span>
           </div>
           <div>
             <div class="stept">종료 실행</div>
@@ -452,10 +447,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>1차 대고객 공지 개시</h4>
             <div class="mw">9월 2째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">09.07</div>
               <ul class="acts">
@@ -476,9 +470,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>감독당국 시스템 변경 보고 및 거래소 · 협회 통보 접수</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -487,10 +480,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>법정 고지 마감선 통과</h4>
             <div class="mw">9월 3째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">09.16</div>
               <ul class="acts">
@@ -503,9 +495,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>콜센터 응대 스크립트 · FAQ 배포, IVR 안내 멘트 추가, 지점 POP 게시</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -514,10 +505,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>2차 공지 및 추석 연휴 대응</h4>
             <div class="mw">9월 4째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">09.22</div>
               <ul class="acts">
@@ -530,9 +520,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>추석 연휴 — 신규 발송 중단, 홈페이지 상시 배너만 유지 <b>(09.24~09.25 증시 휴장)</b></li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -541,10 +530,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>개별 접촉 개시 및 3차 공지</h4>
             <div class="mw">10월 1째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">09.30</div>
               <ul class="acts">
@@ -559,9 +547,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>MTS · 신 HTS 동시접속 부하 테스트 — WTS 최대 동접 이관 시나리오 검증</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -570,10 +557,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>취약 고객 지원 및 4차 공지</h4>
             <div class="mw">10월 2째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">10.05</div>
               <ul class="acts">
@@ -588,9 +574,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>한글날 — 증시 휴장, 상담 창구는 정상 운영</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow dday">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -599,10 +584,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>최종 공지 및 서비스 종료 실행<span class="grade best">종료 실행</span></h4>
             <div class="mw">10월 3째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">10.12</div>
               <ul class="acts">
@@ -628,9 +612,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li><b>정규장 종료 후 18:00 WTS · PC웹 접속 종료.</b> 안내 페이지 리다이렉트 전환, 종료 완료 보고</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -639,19 +622,17 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>종료 후 첫 거래일 모니터링</h4>
             <div class="mw">10월 4째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">10.19</div>
               <ul class="acts">
                 <li>VOC · 콜 인바운드 실시간 모니터링, 대체 채널 접속 지표 점검</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -660,10 +641,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>미전환 고객 대응 및 민원 분석</h4>
             <div class="mw">10월 5째주 ~ 11월 2째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">10.30</div>
               <ul class="acts">
@@ -676,9 +656,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
                 <li>민원 발생 건 유형별 원인 분석 및 대체 채널 전환율 집계</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -687,19 +666,17 @@ ul.acts li b{color:var(--ink);font-weight:700}
             <h4>종료 결과 경영진 보고</h4>
             <div class="mw">11월 3째주</div>
           </div>
-          <div class="c">
-            <details class="item">
-              <summary>상세 실행계획<span class="more"></span></summary>
-              <div class="idet">
+          <details class="item">
+            <summary>상세 실행계획<span class="more"></span></summary>
+            <div class="idet">
             <div class="dgrp">
               <div class="dhd">11.16</div>
               <ul class="acts">
                 <li>전환율 · 민원 건수 보고, 리다이렉트 유지 기간 및 시스템 폐기 · 개인정보 처리 계획 확정</li>
               </ul>
             </div>
-              </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
       </div>
     </div>
@@ -776,16 +753,6 @@ ul.acts li b{color:var(--ink);font-weight:700}
       <p class="foot">※ 등급은 발생 가능성과 영향도를 함께 반영한 것으로, 「중점 관리」 3건은 통제 방안 승인 여부에 따라 관리 수준이 달라진다.</p>
     </div>
 
-    <div class="blk">
-      <div class="assume light">
-        <strong>보고 전 확인이 필요한 사항</strong>
-        <ul class="rep">
-          <li>전자금융거래 약관 변경에 따른 <b>시행 1개월 전 고지 의무의 적용 여부</b> — 준법감시부 · 법무팀 최종 확인. 채널 폐지가 약관 변경에 해당하는지 여부가 09.16 고지 마감선의 근거가 된다</li>
-          <li>고객 규모 및 콜센터 증원 소요 인건비 — 09.07 명부 추출 후 수치 확정 및 본 계획 보완</li>
-          <li>종료 시각(10.16 18:00) 및 리다이렉트 유지 기간(안 6개월) — IT운영부 확인 후 확정</li>
-        </ul>
-      </div>
-    </div>
 
     <div class="secfoot">
       <span class="lg"><span class="cimark" role="img" aria-label="Hanwha Investment&amp;Securities"></span></span>
