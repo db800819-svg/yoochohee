@@ -103,6 +103,10 @@ three.js 는 CDN(jsDelivr)에서 불러오므로 `npm install` 이 필요 없다
 
 ## 공통 사항
 
+- **다크 한 가지로 확정했다.** 보는 사람이 OS 라이트 모드를 쓰더라도 같은
+  어두운 톤으로 보인다. `prefers-color-scheme` 분기를 두지 않고 `:root` 에
+  값을 직접 박고 `color-scheme: dark` 를 선언해 두었다. 색을 바꿀 일이 있으면
+  `app.css` 의 `:root` 한 곳만 고치면 된다.
 - 모바일에서는 터치 이동과 기기 기울기에도 반응한다.
 - OS 의 "동작 줄이기(prefers-reduced-motion)" 설정을 켜면 부유·잔상이 멈춘다.
 - 배포는 `web/` 폴더를 GitHub Pages / Netlify / Vercel 에 그대로 올리면 된다.

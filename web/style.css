@@ -1,4 +1,7 @@
 :root {
+  /* 다크 한 가지로 확정 — 이미지 버전과 톤을 맞춘다 */
+  color-scheme: dark;
+
   --bg: #0b0d14;
   --fg: #f2f4f8;
   --muted: #9aa3b2;

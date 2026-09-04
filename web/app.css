@@ -1,4 +1,9 @@
 :root {
+  /* 이 페이지는 다크 한 가지로 확정한다. 보는 사람이 OS 라이트 모드를 써도
+     같은 톤으로 보이도록 prefers-color-scheme 분기를 두지 않는다.
+     (스크롤바 등 브라우저 UI 도 어둡게 맞추려고 color-scheme 을 함께 선언) */
+  color-scheme: dark;
+
   --ground: #0b0c11;
   --ground-2: #05060a;
   --fg: #f2f3f7;
