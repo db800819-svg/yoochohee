@@ -1,13 +1,24 @@
 :root {
-  --bg: #08090f;
-  --fg: #f4f6fb;
-  --muted: #98a1b3;
-  --accent: #7c6cff;
-  --accent-2: #22d3ee;
+  --ground: #0b0c11;
+  --ground-2: #05060a;
+  --fg: #f2f3f7;
+  --muted: #969cb0;
+  --line: #23262f;
+  --accent: #6b8cff;
+  --grid: rgba(242, 243, 247, 0.05);
+  --cast: rgba(0, 0, 0, 0.62);
+  --halo: rgba(70, 108, 255, 0.24);
 
-  /* app.js 가 마우스 위치에 따라 갱신하는 값 */
-  --mx: 0;   /* -1 ~ 1 (좌 → 우) */
-  --my: 0;   /* -1 ~ 1 (상 → 하) */
+  /* 고담(유료 서체)의 대체: Montserrat — 기하학적 산세리프로 대문자 조합이 가장 근접 */
+  --font-display: "Montserrat", "Pretendard", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  /* 두 글리프의 렌더 높이를 맞춰 같은 크기의 글자처럼 보이게 한다 */
+  --glyph-h: min(33vmin, 300px);
+
+  /* app.js 가 포인터 위치에 따라 갱신 (-1 ~ 1) */
+  --mx: 0;
+  --my: 0;
 }
 
 * { box-sizing: border-box; }
@@ -16,10 +27,9 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--ground);
   color: var(--fg);
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -28,121 +38,34 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(120% 90% at 50% 0%, #131629 0%, #08090f 55%, #05060a 100%);
+  background: radial-gradient(120% 85% at 50% 8%, var(--ground) 0%, var(--ground-2) 100%);
   overflow: hidden;
 }
 
 .backdrop__grid {
   position: absolute;
-  inset: -20%;
+  inset: -15%;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 64px 64px;
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
   /* 마우스 반대로 아주 조금 밀려 깊이감을 만든다 */
-  transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * -14px), 0);
-  mask-image: radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 75%);
+  transform: translate3d(calc(var(--mx) * -16px), calc(var(--my) * -16px), 0);
+  mask-image: radial-gradient(68% 58% at 50% 46%, #000 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(68% 58% at 50% 46%, #000 25%, transparent 78%);
 }
 
-.backdrop__glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
-}
-
-.backdrop__glow--a {
-  width: 46vmax;
-  height: 46vmax;
-  left: 50%;
-  top: 42%;
-  background: var(--accent);
-  transform: translate(-50%, -50%) translate3d(calc(var(--mx) * 26px), calc(var(--my) * 26px), 0);
-}
-
-.backdrop__glow--b {
-  width: 28vmax;
-  height: 28vmax;
-  right: 6%;
-  bottom: 4%;
-  background: var(--accent-2);
-  opacity: 0.24;
-  transform: translate3d(calc(var(--mx) * -18px), calc(var(--my) * -18px), 0);
-}
-
-/* ---------------------------------------------------------------- 무대 */
-.stage {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  perspective: 1100px;
-  perspective-origin: 50% 45%;
-  touch-action: none;
-}
-
-/* 마우스 추적 + 부유 애니메이션이 적용되는 레이어 (transform 은 JS 가 관리) */
-.floaty {
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.asset {
-  position: relative;
-  transform-style: preserve-3d;
-  filter: drop-shadow(0 34px 46px rgba(0, 0, 0, 0.62));
-}
-
-#asset {
-  display: block;
-  width: min(52vmin, 520px);
-  height: auto;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-#asset.is-ready { opacity: 1; }
-
-/* 에셋 실루엣으로 마스킹되는 하이라이트 — 마우스 쪽에서 빛이 드는 효과 */
-.sheen {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: screen;
-  transition: opacity 0.8s ease;
-  background: radial-gradient(
-    38% 38% at calc(50% + var(--mx) * 42%) calc(50% + var(--my) * 42%),
-    rgba(255, 255, 255, 0.42) 0%,
-    rgba(160, 190, 255, 0.16) 40%,
-    transparent 72%
-  );
-  mask-image: var(--asset-mask);
-  -webkit-mask-image: var(--asset-mask);
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-
-.sheen.is-ready { opacity: 1; }
-
-/* 바닥 그림자 — 에셋이 기운 반대쪽으로 흐르고, 뜰수록 옅어진다 */
-.shadow {
+.backdrop__halo {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: min(40vmin, 400px);
-  height: min(9vmin, 90px);
+  top: 46%;
+  width: 68vmin;
+  height: 62vmin;
   border-radius: 50%;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.62), transparent 70%);
-  filter: blur(14px);
-  will-change: transform, opacity;
-  pointer-events: none;
+  background: var(--halo);
+  filter: blur(70px);
+  transform: translate(-50%, -50%)
+    translate3d(calc(var(--mx) * 28px), calc(var(--my) * 28px), 0);
 }
 
 /* ---------------------------------------------------------------- 워드마크 */
@@ -157,13 +80,97 @@ html, body {
   width: min(560px, calc(100vw - 40px));
   text-align: center;
   font-size: clamp(26px, 4.4vw, 44px);
-  /* 고담(유료 서체)의 대체: Montserrat — 기하학적 산세리프로 대문자 조합이 가장 근접 */
-  font-family: "Montserrat", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1.1;
   color: var(--fg);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- 무대 */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  touch-action: none;
+}
+
+/* 글리프를 나란히. 원근은 행에 두어 각 글리프의 소실점이 자연스럽게 갈린다 */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* M1 이 한 단어로 읽히도록 좁게. 이미지는 글리프에 맞춰 잘라 둬서
+     여기 값이 곧 눈에 보이는 자간이 된다. */
+  gap: clamp(2px, 1vmin, 12px);
+  perspective: 1100px;
+  perspective-origin: 50% 44%;
+}
+
+.slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.floaty {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.glyph {
+  position: relative;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 26px 34px var(--cast));
+}
+
+.glyph img {
+  display: block;
+  height: var(--glyph-h);
+  width: auto;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.glyph img.is-ready { opacity: 1; }
+
+/* 실루엣으로 마스킹된 하이라이트 — 커서 쪽에서 빛이 든다 */
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 0.7s ease;
+  background: radial-gradient(
+    36% 36% at calc(50% + var(--mx) * 44%) calc(50% + var(--my) * 44%),
+    rgba(255, 255, 255, 0.36) 0%,
+    rgba(170, 200, 255, 0.11) 42%,
+    transparent 72%
+  );
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.sheen.is-ready { opacity: 1; }
+
+/* 바닥 그림자 — 글리프가 뜰수록 작고 옅어진다 */
+.cast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--glyph-h) * -0.22);
+  width: calc(var(--glyph-h) * 0.72);
+  height: calc(var(--glyph-h) * 0.16);
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, var(--cast), transparent 72%);
+  filter: blur(12px);
+  will-change: transform, opacity;
   pointer-events: none;
 }
 
@@ -177,7 +184,7 @@ html, body {
   margin: 0;
   max-width: min(600px, calc(100vw - 40px));
   padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(16, 18, 30, 0.92);
   font-size: 13px;
@@ -192,7 +199,7 @@ html, body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .backdrop__grid,
-  .backdrop__glow { transform: none; }
+  .backdrop__grid { transform: none; }
+  .backdrop__halo { transform: translate(-50%, -50%); }
   .wordmark { transform: translateX(-50%); }
 }

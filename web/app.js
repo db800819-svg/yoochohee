@@ -1,43 +1,58 @@
 /* ==================================================================
- * 마우스를 따라 기울고 둥둥 떠다니는 3D 에셋
+ * 마우스를 따라 기울고 각자 둥둥 떠다니는 3D 에셋
  *
- * 캡처 이미지 한 장이면 동작한다. 밝은 단색 배경(스크린샷)은
- * 브라우저에서 자동으로 투명하게 잘라내므로 별도 도구가 필요 없다.
+ * 3D 모델 파일 없이 캡처 이미지만으로 동작한다.
+ * 글리프를 추가하려면 CONFIG.assets 에 한 줄 더 넣으면 된다.
  * ================================================================== */
 
 const CONFIG = {
-  /* 에셋 이미지 경로. 없으면 placeholder.svg 로 대체된다.
-     asset-cutout.png 은 배경을 미리 제거해 둔 파일이라 캔버스 처리가
-     필요 없다 → index.html 을 더블클릭해서 열어도 그대로 동작한다. */
-  assetUrl: './images/asset-cutout.png',
-  fallbackUrl: './images/placeholder.svg',
+  /* 화면에 나란히 놓을 글리프.
+
+     글리프별 편차 — 값을 같게 두면 여러 오브젝트가 한 덩어리처럼
+     움직여 어색해진다. 각자 떠 있는 느낌은 이 값들에서 나온다.
+       phase / speedMul / ampMul : 부유 위상·주기·진폭
+       easeMul                   : 커서를 따라오는 속도 (작을수록 늦게 따라옴)
+       tiltMul / driftMul        : 마우스 반응의 크기
+       baseRotY / baseRotZ       : 가만히 있을 때의 기본 각도 (deg)
+       scale                     : 크기 미세 보정 */
+  assets: [
+    // M — 기준
+    { url: './images/asset-cutout.png',
+      alt: '격자 무늬로 부풀어 오른 M 형태의 3D 에셋',
+      phase: 0.0, speedMul: 1.00, ampMul: 1.00,
+      easeMul: 1.00, tiltMul: 1.00, driftMul: 1.00,
+      baseRotY: -5, baseRotZ: -1.5, scale: 1.00 },
+
+    // 1 — 더 느리게 따라오고, 덜 기울고, 기본 각도부터 다르다
+    { url: './images/asset-1-cutout.png',
+      alt: '파란 얼룩무늬로 부풀어 오른 숫자 1 형태의 3D 에셋',
+      phase: 2.1, speedMul: 0.84, ampMul: 1.24,
+      easeMul: 0.55, tiltMul: 0.58, driftMul: 0.72,
+      baseRotY: 10, baseRotZ: 2.5, scale: 1.02 },
+  ],
 
   /* 배경 제거 — 스크린샷의 단색 배경을 투명하게 만든다.
-     위 asset-cutout.png 은 이미 투명하므로 꺼 둔다.
-     새로 캡처한 이미지(배경 있는 원본)를 쓸 때만 true 로 바꾸고,
-     그때는 로컬 서버로 열어야 한다.
-     tolerance: 클수록 과감하게 지운다. 이 에셋에는 34가 가장 깨끗했다. */
+     위 *-cutout.png 는 배경을 미리 제거해 둔 파일이라 꺼 두었고,
+     덕분에 index.html 을 더블클릭해서 열어도 동작한다.
+     배경이 있는 새 캡처를 쓸 때만 true 로 바꾸고 로컬 서버로 연다.
+     tolerance: 클수록 과감하게 지운다. M 은 34, 1 은 24가 가장 깨끗했다. */
   removeBackground: false,
-  tolerance: 34,
+  tolerance: 30,
 
   /* 움직임 */
-  tiltX: 11,      // 마우스 상하 → 기울기 (deg)
-  tiltY: 15,      // 마우스 좌우 → 회전 (deg)
-  driftX: 34,     // 마우스 좌우 → 이동 (px)
-  driftY: 22,     // 마우스 상하 → 이동 (px)
-  ease: 0.07,     // 따라오는 속도. 작을수록 느긋하고 부드럽다 (0.02~0.15)
-  floatAmp: 16,   // 둥둥 뜨는 진폭 (px)
-  floatSpeed: 0.8,// 둥둥 뜨는 속도
-  swayDeg: 1.6,   // 좌우로 살짝 흔들리는 각도 (deg)
+  ease: 0.07,      // 커서를 따라오는 속도 (작을수록 느긋함)
+  tilt: 15,        // 최대 기울기 (deg)
+  float: 16,       // 부유 진폭 (px)
+  driftX: 34,      // 마우스 좌우 → 이동 (px)
+  driftY: 22,      // 마우스 상하 → 이동 (px)
+  swayDeg: 1.6,    // 좌우로 살짝 흔들리는 각도 (deg)
+  speed: 0.8,      // 부유 속도
 };
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const root = document.documentElement;
-const floaty = document.getElementById('floaty');
-const shadow = document.getElementById('shadow');
-const sheen = document.getElementById('sheen');
-const assetImg = document.getElementById('asset');
+const row = document.getElementById('row');
 const notice = document.getElementById('notice');
 
 function showNotice(html) {
@@ -60,6 +75,7 @@ function showNotice(html) {
 function cutOutBackground(img, tolerance) {
   const w = img.naturalWidth;
   const h = img.naturalHeight;
+  if (!w || !h) return null;
 
   const canvas = document.createElement('canvas');
   canvas.width = w;
@@ -67,7 +83,6 @@ function cutOutBackground(img, tolerance) {
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   ctx.drawImage(img, 0, 0);
 
-  // file:// 로 열면 캔버스가 오염돼 픽셀을 읽을 수 없다 → 원본 사용
   let image;
   try {
     image = ctx.getImageData(0, 0, w, h);
@@ -76,15 +91,11 @@ function cutOutBackground(img, tolerance) {
   }
   const px = image.data;
 
-  // 이미 투명 배경이면 건드리지 않는다
-  const cornerAlpha = [0, (w - 1) * 4, (h - 1) * w * 4, (h * w - 1) * 4];
-  if (cornerAlpha.every((i) => px[i + 3] < 12)) return null;
+  const corners = [0, (w - 1) * 4, (h - 1) * w * 4, (h * w - 1) * 4];
+  if (corners.every((i) => px[i + 3] < 12)) return null;
 
-  // 네 모서리 색의 평균을 배경색으로 본다
   let br = 0, bg = 0, bb = 0;
-  for (const i of cornerAlpha) {
-    br += px[i]; bg += px[i + 1]; bb += px[i + 2];
-  }
+  for (const i of corners) { br += px[i]; bg += px[i + 1]; bb += px[i + 2]; }
   br /= 4; bg /= 4; bb /= 4;
 
   const tol2 = tolerance * tolerance * 3;
@@ -93,9 +104,10 @@ function cutOutBackground(img, tolerance) {
     return dr * dr + dg * dg + db * db;
   };
 
-  // 테두리 픽셀을 씨앗으로 flood fill
   const seen = new Uint8Array(w * h);
+  const isBg = new Uint8Array(w * h);
   const stack = [];
+
   const push = (x, y) => {
     const p = y * w + x;
     if (seen[p]) return;
@@ -106,7 +118,6 @@ function cutOutBackground(img, tolerance) {
   for (let x = 0; x < w; x++) { push(x, 0); push(x, h - 1); }
   for (let y = 0; y < h; y++) { push(0, y); push(w - 1, y); }
 
-  const isBg = new Uint8Array(w * h);
   while (stack.length) {
     const p = stack.pop();
     isBg[p] = 1;
@@ -118,25 +129,18 @@ function cutOutBackground(img, tolerance) {
     if (y < h - 1) push(x, y + 1);
   }
 
-  // 경계를 부드럽게: 배경과 맞닿은 픽셀은 색이 배경에 가까운 만큼 반투명하게
-  const softened = new Float32Array(w * h);
+  // 경계를 부드럽게: 배경과 맞닿은 픽셀은 배경색에 가까운 만큼 반투명하게
   for (let p = 0; p < w * h; p++) {
-    if (isBg[p]) { softened[p] = 0; continue; }
+    if (isBg[p]) { px[p * 4 + 3] = 0; continue; }
     const x = p % w;
     const y = (p - x) / w;
-    const touchesBg =
-      (x > 0 && isBg[p - 1]) ||
-      (x < w - 1 && isBg[p + 1]) ||
-      (y > 0 && isBg[p - w]) ||
-      (y < h - 1 && isBg[p + w]);
-
-    if (!touchesBg) { softened[p] = 1; continue; }
+    const edge =
+      (x > 0 && isBg[p - 1]) || (x < w - 1 && isBg[p + 1]) ||
+      (y > 0 && isBg[p - w]) || (y < h - 1 && isBg[p + w]);
+    if (!edge) continue;
     const d = Math.sqrt(dist2(p * 4));
-    softened[p] = Math.min(1, Math.max(0, (d - tolerance) / tolerance));
-  }
-
-  for (let p = 0; p < w * h; p++) {
-    px[p * 4 + 3] = Math.round(px[p * 4 + 3] * softened[p]);
+    const a = Math.min(1, Math.max(0, (d - tolerance) / tolerance));
+    px[p * 4 + 3] = Math.round(px[p * 4 + 3] * a);
   }
 
   ctx.putImageData(image, 0, 0);
@@ -144,26 +148,38 @@ function cutOutBackground(img, tolerance) {
 }
 
 /* ------------------------------------------------------------------
- * 에셋 로드
+ * 글리프 만들기
  * ------------------------------------------------------------------ */
-function applyAsset(url) {
-  assetImg.src = url;
-  // 하이라이트가 에셋 실루엣 안에만 보이도록 같은 이미지를 마스크로 쓴다
-  root.style.setProperty('--asset-mask', `url("${url}")`);
-  assetImg.classList.add('is-ready');
-  sheen.classList.add('is-ready');
-}
+const slots = CONFIG.assets.map((asset) => {
+  const slot = document.createElement('div');
+  slot.className = 'slot';
+  slot.innerHTML =
+    '<div class="cast" aria-hidden="true"></div>' +
+    '<div class="floaty"><div class="glyph">' +
+    '<img alt="" /><div class="sheen" aria-hidden="true"></div>' +
+    '</div></div>';
+  row.appendChild(slot);
 
-function loadAsset(url, isFallback) {
+  const img = slot.querySelector('img');
+  const sheen = slot.querySelector('.sheen');
+  img.alt = asset.alt || '';
+
+  function apply(url) {
+    img.src = url;
+    // 하이라이트가 글리프 실루엣 안에만 보이도록 같은 이미지를 마스크로 쓴다
+    sheen.style.maskImage = `url("${url}")`;
+    sheen.style.webkitMaskImage = `url("${url}")`;
+    img.classList.add('is-ready');
+    sheen.classList.add('is-ready');
+  }
+
   const probe = new Image();
-  probe.crossOrigin = 'anonymous';
-
   probe.onload = () => {
-    let finalUrl = url;
+    let url = asset.url;
     if (CONFIG.removeBackground) {
       const cut = cutOutBackground(probe, CONFIG.tolerance);
       if (typeof cut === 'string') {
-        finalUrl = cut;
+        url = cut;
       } else if (cut === false) {
         showNotice(
           '배경을 자동으로 지우지 못했습니다. ' +
@@ -172,59 +188,28 @@ function loadAsset(url, isFallback) {
         );
       }
     }
-    applyAsset(finalUrl);
-
-    if (isFallback) {
-      showNotice(
-        '지금 보이는 건 임시 에셋입니다. Tripo에서 캡처한 이미지를 ' +
-        '<code>web/images/asset.png</code> 로 저장하면 바로 교체됩니다.'
-      );
-    }
+    apply(url);
   };
-
   probe.onerror = () => {
-    if (isFallback) return;   // 대체 이미지까지 실패하면 조용히 포기
-    loadAsset(CONFIG.fallbackUrl, true);
+    slot.remove();
+    showNotice(`이미지를 찾을 수 없습니다: <code>${asset.url}</code>`);
   };
+  probe.src = asset.url;
 
-  probe.src = url;
-}
-
-loadAsset(CONFIG.assetUrl, false);
-
-/* ------------------------------------------------------------------
- * 이미지 바로 넣어보기
- *
- * asset.png 로 저장하기 전에 결과를 미리 보고 싶을 때,
- * 파일을 창에 끌어다 놓거나 Ctrl+V 로 붙여넣으면 바로 반영된다.
- * (새로고침하면 다시 asset.png 를 읽는다)
- * ------------------------------------------------------------------ */
-function useLocalFile(file) {
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    notice.hidden = true;
-    loadAsset(reader.result, false);
+  return {
+    floaty: slot.querySelector('.floaty'),
+    cast: slot.querySelector('.cast'),
+    cur: { x: 0, y: 0 },   // 글리프마다 따로 감쇠 → 반응이 어긋나 각자 움직인다
+    phase: asset.phase || 0,
+    speedMul: asset.speedMul ?? 1,
+    ampMul: asset.ampMul ?? 1,
+    easeMul: asset.easeMul ?? 1,
+    tiltMul: asset.tiltMul ?? 1,
+    driftMul: asset.driftMul ?? 1,
+    baseRotY: asset.baseRotY ?? 0,
+    baseRotZ: asset.baseRotZ ?? 0,
+    scale: asset.scale ?? 1,
   };
-  reader.readAsDataURL(file);
-}
-
-window.addEventListener('dragover', (e) => e.preventDefault());
-window.addEventListener('drop', (e) => {
-  e.preventDefault();
-  useLocalFile(e.dataTransfer && e.dataTransfer.files[0]);
-});
-
-window.addEventListener('paste', (e) => {
-  const items = e.clipboardData && e.clipboardData.items;
-  if (!items) return;
-  for (const item of items) {
-    if (item.type && item.type.startsWith('image/')) {
-      useLocalFile(item.getAsFile());
-      e.preventDefault();
-      return;
-    }
-  }
 });
 
 /* ------------------------------------------------------------------
@@ -245,7 +230,6 @@ window.addEventListener('touchmove', (e) => {
 }, { passive: true });
 
 // 커서가 창을 벗어나면 천천히 제자리로
-window.addEventListener('pointerleave', () => { target.x = 0; target.y = 0; });
 document.addEventListener('mouseleave', () => { target.x = 0; target.y = 0; });
 
 // 모바일: 기기 기울기에도 반응 (권한이 필요한 환경에서는 그냥 무시된다)
@@ -258,13 +242,12 @@ window.addEventListener('deviceorientation', (e) => {
 /* ------------------------------------------------------------------
  * 렌더 루프
  * ------------------------------------------------------------------ */
-const SHADOW_OFFSET_VMIN = 26;   // 에셋 중심에서 그림자까지의 거리
 const start = performance.now();
 
 function frame(now) {
   const t = (now - start) / 1000;
 
-  // 목표값으로 감쇠 이동 → "따라오는" 느낌의 핵심
+  // 배경·워드마크용 기준 좌표 (첫 글리프와 같은 속도)
   const ease = reduceMotion ? 1 : CONFIG.ease;
   current.x += (target.x - current.x) * ease;
   current.y += (target.y - current.y) * ease;
@@ -272,31 +255,40 @@ function frame(now) {
   root.style.setProperty('--mx', current.x.toFixed(4));
   root.style.setProperty('--my', current.y.toFixed(4));
 
-  // 둥둥 떠다니는 성분
-  const bobY = reduceMotion ? 0 : Math.sin(t * CONFIG.floatSpeed) * CONFIG.floatAmp;
-  const bobX = reduceMotion ? 0 : Math.cos(t * CONFIG.floatSpeed * 0.7) * CONFIG.floatAmp * 0.35;
-  const sway = reduceMotion ? 0 : Math.sin(t * CONFIG.floatSpeed * 0.5) * CONFIG.swayDeg;
+  for (const s of slots) {
+    // 글리프마다 감쇠 속도가 달라 커서를 따라오는 타이밍이 어긋난다
+    const e = reduceMotion ? 1 : CONFIG.ease * s.easeMul;
+    s.cur.x += (target.x - s.cur.x) * e;
+    s.cur.y += (target.y - s.cur.y) * e;
 
-  const dx = current.x * CONFIG.driftX + bobX;
-  const dy = current.y * CONFIG.driftY + bobY;
+    const amp = reduceMotion ? 0 : CONFIG.float * s.ampMul;
+    const w = CONFIG.speed * s.speedMul;
+    const bobY = Math.sin(t * w + s.phase) * amp;
+    const bobX = Math.cos(t * w * 0.7 + s.phase) * amp * 0.35;
+    const sway = reduceMotion ? 0 : Math.sin(t * w * 0.5 + s.phase) * CONFIG.swayDeg;
 
-  floaty.style.transform =
-    `translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0)` +
-    ` rotateX(${(-current.y * CONFIG.tiltX).toFixed(2)}deg)` +
-    ` rotateY(${(current.x * CONFIG.tiltY).toFixed(2)}deg)` +
-    ` rotateZ(${sway.toFixed(2)}deg)`;
+    const dx = s.cur.x * CONFIG.driftX * s.driftMul + bobX;
+    const dy = s.cur.y * CONFIG.driftY * s.driftMul + bobY;
+    const rx = -s.cur.y * CONFIG.tilt * 0.73 * s.tiltMul;
+    const ry = s.cur.x * CONFIG.tilt * s.tiltMul + s.baseRotY;
+    const rz = sway + s.baseRotZ;
 
-  // 그림자는 반대 방향으로 흐르고, 에셋이 높이 뜰수록 작고 옅어진다
-  const lift = (bobY + CONFIG.floatAmp) / (CONFIG.floatAmp * 2); // 0(위) ~ 1(아래)
-  const shadowScale = 0.82 + lift * 0.2;
-  const shadowX = -current.x * 26 - bobX * 0.6;          // px
-  const shadowY = SHADOW_OFFSET_VMIN + current.y * 2.5;  // vmin
+    s.floaty.style.transform =
+      `translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0)` +
+      ` rotateX(${rx.toFixed(2)}deg)` +
+      ` rotateY(${ry.toFixed(2)}deg)` +
+      ` rotateZ(${rz.toFixed(2)}deg)` +
+      ` scale(${s.scale})`;
 
-  shadow.style.transform =
-    `translate(-50%, -50%)` +
-    ` translate(${shadowX.toFixed(2)}px, ${shadowY.toFixed(2)}vmin)` +
-    ` scale(${shadowScale.toFixed(3)})`;
-  shadow.style.opacity = (0.34 + lift * 0.26).toFixed(3);
+    // 뜨는 높이: 0(가장 높음) ~ 1(가장 낮음). 그림자는 반대로 반응한다.
+    const lift = amp > 0 ? (bobY + amp) / (amp * 2) : 0.5;
+
+    s.cast.style.transform =
+      `translateX(-50%)` +
+      ` translate(${(-s.cur.x * 20 - bobX * 0.6).toFixed(2)}px, ${(s.cur.y * 6).toFixed(2)}px)` +
+      ` scale(${(0.8 + lift * 0.22).toFixed(3)})`;
+    s.cast.style.opacity = (0.3 + lift * 0.28).toFixed(3);
+  }
 
   requestAnimationFrame(frame);
 }
