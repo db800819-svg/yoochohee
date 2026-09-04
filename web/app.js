@@ -156,21 +156,16 @@ const slots = CONFIG.assets.map((asset) => {
   slot.innerHTML =
     '<div class="cast" aria-hidden="true"></div>' +
     '<div class="floaty"><div class="glyph">' +
-    '<img alt="" /><div class="sheen" aria-hidden="true"></div>' +
+    '<img alt="" draggable="false" />' +
     '</div></div>';
   row.appendChild(slot);
 
   const img = slot.querySelector('img');
-  const sheen = slot.querySelector('.sheen');
   img.alt = asset.alt || '';
 
   function apply(url) {
     img.src = url;
-    // 하이라이트가 글리프 실루엣 안에만 보이도록 같은 이미지를 마스크로 쓴다
-    sheen.style.maskImage = `url("${url}")`;
-    sheen.style.webkitMaskImage = `url("${url}")`;
     img.classList.add('is-ready');
-    sheen.classList.add('is-ready');
   }
 
   const probe = new Image();

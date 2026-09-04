@@ -130,35 +130,16 @@ html, body {
   display: block;
   height: var(--glyph-h);
   width: auto;
+  border: 0;
+  outline: none;
   opacity: 0;
   transition: opacity 0.7s ease;
   user-select: none;
   -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .glyph img.is-ready { opacity: 1; }
-
-/* 실루엣으로 마스킹된 하이라이트 — 커서 쪽에서 빛이 든다 */
-.sheen {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: screen;
-  transition: opacity 0.7s ease;
-  background: radial-gradient(
-    36% 36% at calc(50% + var(--mx) * 44%) calc(50% + var(--my) * 44%),
-    rgba(255, 255, 255, 0.36) 0%,
-    rgba(170, 200, 255, 0.11) 42%,
-    transparent 72%
-  );
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-
-.sheen.is-ready { opacity: 1; }
 
 /* 바닥 그림자 — 글리프가 뜰수록 작고 옅어진다 */
 .cast {
