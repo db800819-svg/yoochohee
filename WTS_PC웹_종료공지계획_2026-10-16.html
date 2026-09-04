@@ -314,9 +314,11 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
   color:var(--ink);background:var(--paper);border-radius:50%}
 .tmark svg{display:block;width:100%;height:100%}
 .tlrow.hard .tmark,.tlrow.dday .tmark{color:var(--after)}
+.tlrow.soft .tmark{color:var(--mute)}
+.tlrow.soft .k .w,.tlrow.soft .k h4{color:var(--mute)}
 .tlrow.dday .tmark{left:-1px;top:20.5px;width:19px;height:19px}
 
-.tlrow .k{text-align:right;margin-bottom:16px}
+.tlrow .k{text-align:left;margin-bottom:16px}
 .tlrow .k .w{font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.38;color:var(--ink)}
 .tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
 .tlrow .k h4{font-size:18px;font-weight:800;letter-spacing:-.015em;line-height:1.4;margin:7px 0 0;color:var(--ink)}
@@ -338,7 +340,6 @@ ul.acts li b{color:var(--ink);font-weight:700}
 
 @media (max-width:900px){
   .tlrow{padding-left:32px}
-  .tlrow .k{text-align:left}
 }
 @media print{.tlrow{break-inside:avoid}}
 </style>
@@ -352,7 +353,7 @@ ul.acts li b{color:var(--ink);font-weight:700}
     <div class="brandmeta">2026.09.04</div>
   </div>
 
-  <div class="eyebrow">디지털플랫폼 · 서비스 종료 보고</div>
+  <div class="eyebrow">M1 TF</div>
   <h1>WTS · PC웹 종료 대고객 공지 계획</h1>
   <p class="sub">종료 목표 2026.10.16(금)</p>
 
@@ -369,7 +370,6 @@ ul.acts li b{color:var(--ink);font-weight:700}
 
     <div class="blk">
       <h3>단계 구성</h3>
-      <p class="h3note">기준일(09.04)부터 사후 결과 보고(11.16)까지 73일</p>
       <div class="steps">
         <div class="step">
           <div class="stepcol">
@@ -498,7 +498,7 @@ ul.acts li b{color:var(--ink);font-weight:700}
             </div>
           </details>
         </div>
-        <div class="tlrow">
+        <div class="tlrow soft">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="k">
             <div class="w">09.21 (월) ~ 09.27 (일)</div>
