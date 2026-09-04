@@ -302,20 +302,49 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 
 /* ══════════ 문서별 추가 (토큰만 사용) ══════════ */
 .stepcol .when{font-size:14.5px;font-weight:600;color:var(--mute);line-height:1.45}
-table.cmp .u{display:block;font-size:14px;font-weight:600;color:var(--mute);margin-top:4px}
-table.cmp td.ch{text-align:center;font-weight:800;color:var(--ink);white-space:nowrap}
-table.cmp td.ch.s{font-weight:600;color:var(--mute)}
-table.cmp td.ch.x{color:var(--line);font-weight:400}
-table.cmp thead th.mid{text-align:center}
-/* 주 단위 일정표 — .assume ul.rep 의 하이픈 불릿을 표 안에서 재사용 */
-table.cmp ul.acts{list-style:none;margin:0;padding:0}
-table.cmp ul.acts li{position:relative;padding-left:15px;margin-bottom:7px;line-height:1.65}
-table.cmp ul.acts li:last-child{margin-bottom:0}
-table.cmp ul.acts li:before{content:"–";position:absolute;left:0;top:0;color:var(--mute);font-weight:700}
-table.cmp ul.acts li b{color:var(--ink);font-weight:700}
-table.cmp ul.acts li .dt{font-weight:700;color:var(--ink-2);margin-right:5px}
-table.cmp ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
-table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
+
+/* ── 세로 타임라인 ── */
+.tl{position:relative}
+.tl:before{content:"";position:absolute;left:150px;top:30px;bottom:0;width:1px;background:var(--line)}
+.tlrow{display:grid;grid-template-columns:150px 1fr;position:relative}
+.tlrow:before{content:"";position:absolute;left:146px;top:26px;width:9px;height:9px;
+  border-radius:2px;background:var(--mute)}
+.tlrow.hard:before{background:var(--after)}
+.tlrow.dday:before{left:144px;top:24px;width:13px;height:13px;background:var(--after)}
+.tlrow:last-child .c:after{content:"";position:absolute;left:-5px;top:35px;bottom:0;
+  width:11px;background:var(--paper)}
+.tlrow .k{padding:22px 30px 26px 0;text-align:right}
+.tlrow .k .w{font-size:21.5px;font-weight:800;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
+.tlrow .k .rng{font-size:14.5px;font-weight:600;color:var(--ink-2);margin-top:7px;line-height:1.5}
+.tlrow .k .ph{font-size:14px;font-weight:600;color:var(--mute);margin-top:3px;line-height:1.4;white-space:nowrap}
+.tlrow .k .st{font-size:14px;font-weight:600;color:var(--mute);line-height:1.4;white-space:nowrap}
+.tlrow .c{position:relative;padding:22px 0 26px 30px}
+.tlrow .c h4{font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.4;margin-bottom:11px}
+.tlrow .c h4 .grade{margin-bottom:0;margin-left:9px;vertical-align:2px}
+.tlrow .c .own{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);
+  font-size:14px;color:var(--ink-2);line-height:1.6;display:flex;flex-wrap:wrap;gap:4px 26px}
+.tlrow .c .own b{color:var(--mute);font-weight:700;margin-right:7px}
+
+/* ── 하이픈 불릿 목록 (.assume ul.rep 와 동일 형태) ── */
+ul.acts{list-style:none;margin:0;padding:0;font-size:16px;color:var(--ink-2)}
+ul.acts li{position:relative;padding-left:15px;margin-bottom:7px;line-height:1.68}
+ul.acts li:last-child{margin-bottom:0}
+ul.acts li:before{content:"–";position:absolute;left:0;top:0;color:var(--mute);font-weight:700}
+ul.acts li b{color:var(--ink);font-weight:700}
+ul.acts li .dt{font-weight:700;color:var(--ink-2);margin-right:5px}
+ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
+
+@media (max-width:900px){
+  .tl:before{left:5px}
+  .tlrow{grid-template-columns:1fr}
+  .tlrow:before{left:1px;top:24px}
+  .tlrow.dday:before{left:-1px;top:22px}
+  .tlrow .k{text-align:left;padding:20px 0 8px 26px}
+  .tlrow .c{padding:0 0 24px 26px}
+  .tlrow:last-child .c:after{left:0;top:0;bottom:0;width:11px}
+}
+@media print{.tlrow{break-inside:avoid}}
 </style>
 
 <div class="sheet">
@@ -329,32 +358,7 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
 
   <div class="eyebrow">디지털플랫폼 · 서비스 종료 보고</div>
   <h1>WTS · PC웹 종료 대고객 공지 계획</h1>
-  <p class="sub">종료 목표 2026.10.16(금) · 기준일 2026.09.04(금) D−42 · 수신 부사장 · 상무 · 작성 디지털플랫폼</p>
-
-  <div class="rule"></div>
-
-  <div class="kpis">
-    <div class="kpi">
-      <div class="label">종료까지 잔여</div>
-      <div class="val n">D−42</div>
-      <div class="note">실제 거래일 26일 · 휴장 16일</div>
-    </div>
-    <div class="kpi">
-      <div class="label">1차 공지 개시 마감까지</div>
-      <div class="val r">12일</div>
-      <div class="note">법정 고지 마감 09.16 기준 · 권고 09.11</div>
-    </div>
-    <div class="kpi">
-      <div class="label">대고객 공지 회차</div>
-      <div class="val n">5회</div>
-      <div class="note">D−35 · D−24 · D−14 · D−7 · D−1</div>
-    </div>
-    <div class="kpi">
-      <div class="label">고객 세그먼트</div>
-      <div class="val g">5종</div>
-      <div class="note">A 단독 이용 ~ E 고령 · 취약</div>
-    </div>
-  </div>
+  <p class="sub">종료 목표 2026.10.16(금)</p>
 
   <!-- ══════════ 01 대고객 공지 타임라인 ══════════ -->
   <div class="rule thick"></div>
@@ -363,7 +367,7 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
       <div class="secnum">01</div>
       <div>
         <h2 class="sect">대고객 공지 타임라인</h2>
-        <p class="sectsub">WTS·PC웹 채널을 2026.10.16(금) 정규장 종료 후 폐지하고 MTS·신 HTS로 전환을 유도한다. D−일차는 종료일 기준 역산이며, 단계 6개 · 대고객 공지 5회차로 구성한다.</p>
+        <p class="sectsub">WTS·PC웹 채널을 2026.10.16(금) 정규장 종료 후 폐지하고 MTS·신 HTS로 전환을 유도한다.</p>
       </div>
     </div>
 
@@ -439,119 +443,172 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
     <div class="blk">
       <h3>주 단위 실행 일정</h3>
       <p class="h3note">주차는 월요일 시작 기준 · 「법정 기한」 항목은 지연 시 종료일 순연이 불가피하다</p>
-      <div class="cmpwrap">
-        <table class="cmp">
-          <thead>
-            <tr><th>주차</th><th>기간</th><th>주요 실행 내용</th><th>주관</th><th>산출물</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>W36</th>
-              <td>09.04 (금)<span class="u">D−42 · 단계 0</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">09.04</span>경영진 보고 및 <b>본 계획 승인</b></li>
-              </ul></td>
-              <td>디지털플랫폼</td>
-              <td>본 보고서</td>
-            </tr>
-            <tr>
-              <th>W37</th>
-              <td>09.07 (월) ~ 09.13 (일)<span class="u">D−39 ~ D−33 · 단계 0 → 1</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">09.07</span>공지문 초안 작성 및 대체 채널(MTS·신 HTS) 전환 가이드 제작</li>
-                <li><span class="dt">09.07</span>대상 고객 세그먼트 5종 명부 추출, 법인 계약서 채널 조항 병행 검토</li>
-                <li><span class="dt">09.11</span>준법감시 · 법무 검토 완료 및 CCO 협의 종결 — <b>공지문 문구 확정</b></li>
-                <li><span class="grade best">법정 기한</span><span class="dt">09.11</span><b>1차 대고객 공지 개시</b> — 홈페이지 공지사항·팝업, WTS·PC웹 로그인 팝업, 이메일·LMS 전량 발송</li>
-                <li><span class="dt">09.12</span>감독당국 시스템 변경 보고 및 거래소 · 협회 통보 접수</li>
-              </ul></td>
-              <td>디지털플랫폼<br>준법감시부<br>데이터전략</td>
-              <td>공지문 확정본<br>검토 결과서<br>1차 발송 리포트</td>
-            </tr>
-            <tr>
-              <th>W38</th>
-              <td>09.14 (월) ~ 09.20 (일)<span class="u">D−32 ~ D−26 · 단계 1</span></td>
-              <td><ul class="acts">
-                <li><span class="grade best">법정 기한</span><span class="dt">09.16</span><b>법정 고지 마감선</b> — 미개시 시 이 시점에 종료일 순연 결정을 상신</li>
-                <li><span class="dt">09.18</span>콜센터 응대 스크립트 · FAQ 배포, IVR 안내 멘트 추가, 지점 POP 게시</li>
-              </ul></td>
-              <td>준법감시부<br>고객지원부</td>
-              <td>고지 이행 확인서<br>스크립트 · FAQ</td>
-            </tr>
-            <tr>
-              <th>W39</th>
-              <td>09.21 (월) ~ 09.27 (일)<span class="u">D−25 ~ D−19 · 단계 1 → 2</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">09.22</span><b>2차 공지</b> — 추석 전 리마인드. 앱 푸시 및 MTS·HTS 내 팝업 병행</li>
-                <li><span class="dt">09.24~26</span>추석 연휴 — 신규 발송 중단, 홈페이지 상시 배너만 유지 <b>(09.24~09.25 증시 휴장)</b></li>
-              </ul></td>
-              <td>디지털플랫폼</td>
-              <td>2차 발송 리포트</td>
-            </tr>
-            <tr>
-              <th>W40</th>
-              <td>09.28 (월) ~ 10.04 (일)<span class="u">D−18 ~ D−12 · 단계 2</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">09.30</span>WTS 단독 이용 고객 유선 접촉 개시 — 일일 목표 콜 수 및 접촉 완료율 관리</li>
-                <li><span class="dt">09.30</span>법인 · 기관 고객 담당 RM 개별 안내 및 계약 부속 문서 송부</li>
-                <li><span class="dt">10.02</span><b>3차 공지</b> — 예약 · 조건부 · 자동감시주문 보유 고객 대상 일괄 취소 예정 개별 고지</li>
-                <li><span class="dt">10.02</span>MTS · 신 HTS 동시접속 부하 테스트 — WTS 최대 동접 이관 시나리오 검증</li>
-              </ul></td>
-              <td>고객지원부<br>법인영업부<br>IT운영부</td>
-              <td>접촉 현황 일보<br>계약 변경 통지문<br>부하 테스트 결과</td>
-            </tr>
-            <tr>
-              <th>W41</th>
-              <td>10.05 (월) ~ 10.11 (일)<span class="u">D−11 ~ D−5 · 단계 2 → 3</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">10.05</span>고령 · 취약 고객 전담 상담 및 지점 방문 전환 지원 개시</li>
-                <li><span class="dt">10.09</span><b>4차 공지</b> — WTS·PC웹 전면 배너를 상시 노출로 전환 (한글날 휴장이므로 발송은 10.08 선행)</li>
-                <li><span class="dt">휴장</span>10.05 개천절 대체공휴일 · 10.09 한글날 — 상담 창구는 정상 운영</li>
-              </ul></td>
-              <td>소비자보호부<br>디지털플랫폼</td>
-              <td>지원 실적<br>4차 발송 리포트</td>
-            </tr>
-            <tr>
-              <th>W42</th>
-              <td>10.12 (월) ~ 10.18 (일)<span class="u">D−4 ~ D+2 · 단계 3 → 4</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">10.12</span>콜센터 상담 인력 한시 증원 투입, 미전환 고객 잔여 명부 재추출</li>
-                <li><span class="dt">10.13</span>종료 후 안내 페이지 및 접속 차단 스크립트 배포 준비 완료</li>
-                <li><span class="dt">10.15</span><b>최종 공지</b> 및 종료 전일 안내 — 장 종료 후 예약 · 조건부주문 일괄 취소 실행, 취소 내역 개별 통지</li>
-                <li><span class="dt">10.16</span><b>정규장 종료 후 18:00 WTS · PC웹 접속 종료.</b> 안내 페이지 리다이렉트 전환, 종료 완료 보고</li>
-              </ul></td>
-              <td>고객지원부<br>IT운영부<br>디지털플랫폼</td>
-              <td>취소 처리 내역서<br>종료 완료 보고</td>
-            </tr>
-            <tr>
-              <th>W43</th>
-              <td>10.19 (월) ~ 10.25 (일)<span class="u">D+1 ~ D+7 · 단계 5</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">10.19</span>종료 후 첫 거래일 — VOC · 콜 인바운드 실시간 모니터링, 대체 채널 접속 지표 점검</li>
-              </ul></td>
-              <td>고객지원부</td>
-              <td>VOC 일일 리포트</td>
-            </tr>
-            <tr>
-              <th>W44 ~ W46</th>
-              <td>10.26 (월) ~ 11.15 (일)<span class="u">D+8 ~ D+28 · 단계 5</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">10.30</span>미전환 고객 2차 개별 접촉</li>
-                <li><span class="dt">~11.15</span>민원 발생 건 유형별 원인 분석 및 대체 채널 전환율 집계</li>
-              </ul></td>
-              <td>소비자보호부</td>
-              <td>민원 분석서</td>
-            </tr>
-            <tr>
-              <th>W47</th>
-              <td>11.16 (월) ~<span class="u">D+31 · 단계 5</span></td>
-              <td><ul class="acts">
-                <li><span class="dt">11.16</span>종료 결과 경영진 보고 — 전환율, 민원 건수, 리다이렉트 유지 기간 및 시스템 폐기 · 개인정보 처리 계획 확정</li>
-              </ul></td>
-              <td>디지털플랫폼</td>
-              <td>결과 보고서</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="tl">
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W36</div>
+            <div class="rng">09.04 (금)</div>
+            <div class="ph">D−42</div>
+            <div class="st">단계 0</div>
+          </div>
+          <div class="c">
+            <h4>경영진 보고 및 계획 승인</h4>
+            <ul class="acts">
+            <li><span class="dt">09.04</span>본 계획 승인 및 <b>실행 착수</b></li>
+            </ul>
+            <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>본 보고서</span></div>
+          </div>
+        </div>
+        <div class="tlrow hard">
+          <div class="k">
+            <div class="w">W37</div>
+            <div class="rng">09.07 (월) ~ 09.13 (일)</div>
+            <div class="ph">D−39 ~ D−33</div>
+            <div class="st">단계 0 → 1</div>
+          </div>
+          <div class="c">
+            <h4>1차 대고객 공지 개시</h4>
+            <ul class="acts">
+            <li><span class="dt">09.07</span>공지문 초안 작성 및 대체 채널(MTS · 신 HTS) 전환 가이드 제작</li>
+            <li><span class="dt">09.07</span>대상 고객 세그먼트 명부 추출, 법인 계약서 채널 조항 병행 검토</li>
+            <li><span class="dt">09.11</span>준법감시 · 법무 검토 완료 및 CCO 협의 종결 — <b>공지문 문구 확정</b></li>
+            <li><span class="grade best">법정 기한</span><span class="dt">09.11</span><b>1차 대고객 공지 개시</b> — 홈페이지 공지사항 · 팝업, WTS · PC웹 로그인 팝업, 이메일 · LMS 전량 발송</li>
+            <li><span class="dt">09.12</span>감독당국 시스템 변경 보고 및 거래소 · 협회 통보 접수</li>
+            </ul>
+            <div class="own"><span><b>주관</b>디지털플랫폼 · 준법감시부 · 데이터전략</span><span><b>산출물</b>공지문 확정본 · 검토 결과서 · 1차 발송 리포트</span></div>
+          </div>
+        </div>
+        <div class="tlrow hard">
+          <div class="k">
+            <div class="w">W38</div>
+            <div class="rng">09.14 (월) ~ 09.20 (일)</div>
+            <div class="ph">D−32 ~ D−26</div>
+            <div class="st">단계 1</div>
+          </div>
+          <div class="c">
+            <h4>법정 고지 마감선 통과</h4>
+            <ul class="acts">
+            <li><span class="grade best">법정 기한</span><span class="dt">09.16</span><b>법정 고지 마감선</b> — 미개시 시 이 시점에 종료일 순연 결정을 상신</li>
+            <li><span class="dt">09.18</span>콜센터 응대 스크립트 · FAQ 배포, IVR 안내 멘트 추가, 지점 POP 게시</li>
+            </ul>
+            <div class="own"><span><b>주관</b>준법감시부 · 고객지원부</span><span><b>산출물</b>고지 이행 확인서 · 스크립트 · FAQ</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W39</div>
+            <div class="rng">09.21 (월) ~ 09.27 (일)</div>
+            <div class="ph">D−25 ~ D−19</div>
+            <div class="st">단계 1 → 2</div>
+          </div>
+          <div class="c">
+            <h4>2차 공지 및 추석 연휴 대응</h4>
+            <ul class="acts">
+            <li><span class="dt">09.22</span><b>2차 공지</b> — 추석 전 리마인드. 앱 푸시 및 MTS · HTS 내 팝업 병행</li>
+            <li><span class="dt">09.24~26</span>추석 연휴 — 신규 발송 중단, 홈페이지 상시 배너만 유지 <b>(09.24~09.25 증시 휴장)</b></li>
+            </ul>
+            <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>2차 발송 리포트</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W40</div>
+            <div class="rng">09.28 (월) ~ 10.04 (일)</div>
+            <div class="ph">D−18 ~ D−12</div>
+            <div class="st">단계 2</div>
+          </div>
+          <div class="c">
+            <h4>개별 접촉 개시 및 3차 공지</h4>
+            <ul class="acts">
+            <li><span class="dt">09.30</span>WTS 단독 이용 고객 유선 접촉 개시 — 일일 목표 콜 수 및 접촉 완료율 관리</li>
+            <li><span class="dt">09.30</span>법인 · 기관 고객 담당 RM 개별 안내 및 계약 부속 문서 송부</li>
+            <li><span class="dt">10.02</span><b>3차 공지</b> — 예약 · 조건부 · 자동감시주문 보유 고객 대상 일괄 취소 예정 개별 고지</li>
+            <li><span class="dt">10.02</span>MTS · 신 HTS 동시접속 부하 테스트 — WTS 최대 동접 이관 시나리오 검증</li>
+            </ul>
+            <div class="own"><span><b>주관</b>고객지원부 · 법인영업부 · IT운영부</span><span><b>산출물</b>접촉 현황 일보 · 계약 변경 통지문 · 부하 테스트 결과</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W41</div>
+            <div class="rng">10.05 (월) ~ 10.11 (일)</div>
+            <div class="ph">D−11 ~ D−5</div>
+            <div class="st">단계 2 → 3</div>
+          </div>
+          <div class="c">
+            <h4>취약 고객 지원 및 4차 공지</h4>
+            <ul class="acts">
+            <li><span class="dt">10.05</span>고령 · 취약 고객 전담 상담 및 지점 방문 전환 지원 개시</li>
+            <li><span class="dt">10.09</span><b>4차 공지</b> — WTS · PC웹 전면 배너를 상시 노출로 전환 (한글날 휴장이므로 발송은 10.08 선행)</li>
+            <li><span class="dt">휴장</span>10.05 개천절 대체공휴일 · 10.09 한글날 — 상담 창구는 정상 운영</li>
+            </ul>
+            <div class="own"><span><b>주관</b>소비자보호부 · 디지털플랫폼</span><span><b>산출물</b>지원 실적 · 4차 발송 리포트</span></div>
+          </div>
+        </div>
+        <div class="tlrow dday">
+          <div class="k">
+            <div class="w">W42</div>
+            <div class="rng">10.12 (월) ~ 10.18 (일)</div>
+            <div class="ph">D−4 ~ D+2</div>
+            <div class="st">단계 3 → 4</div>
+          </div>
+          <div class="c">
+            <h4>최종 공지 및 서비스 종료 실행<span class="grade best">종료 실행</span></h4>
+            <ul class="acts">
+            <li><span class="dt">10.12</span>콜센터 상담 인력 한시 증원 투입, 미전환 고객 잔여 명부 재추출</li>
+            <li><span class="dt">10.13</span>종료 후 안내 페이지 및 접속 차단 스크립트 배포 준비 완료</li>
+            <li><span class="dt">10.15</span><b>최종 공지</b> 및 종료 전일 안내 — 장 종료 후 예약 · 조건부주문 일괄 취소 실행, 취소 내역 개별 통지</li>
+            <li><span class="dt">10.16</span><b>정규장 종료 후 18:00 WTS · PC웹 접속 종료.</b> 안내 페이지 리다이렉트 전환, 종료 완료 보고</li>
+            </ul>
+            <div class="own"><span><b>주관</b>고객지원부 · IT운영부 · 디지털플랫폼</span><span><b>산출물</b>취소 처리 내역서 · 종료 완료 보고</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W43</div>
+            <div class="rng">10.19 (월) ~ 10.25 (일)</div>
+            <div class="ph">D+1 ~ D+7</div>
+            <div class="st">단계 5</div>
+          </div>
+          <div class="c">
+            <h4>종료 후 첫 거래일 모니터링</h4>
+            <ul class="acts">
+            <li><span class="dt">10.19</span>VOC · 콜 인바운드 실시간 모니터링, 대체 채널 접속 지표 점검</li>
+            </ul>
+            <div class="own"><span><b>주관</b>고객지원부</span><span><b>산출물</b>VOC 일일 리포트</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W44 ~ W46</div>
+            <div class="rng">10.26 (월) ~ 11.15 (일)</div>
+            <div class="ph">D+8 ~ D+28</div>
+            <div class="st">단계 5</div>
+          </div>
+          <div class="c">
+            <h4>미전환 고객 대응 및 민원 분석</h4>
+            <ul class="acts">
+            <li><span class="dt">10.30</span>미전환 고객 2차 개별 접촉</li>
+            <li><span class="dt">~11.15</span>민원 발생 건 유형별 원인 분석 및 대체 채널 전환율 집계</li>
+            </ul>
+            <div class="own"><span><b>주관</b>소비자보호부</span><span><b>산출물</b>민원 분석서</span></div>
+          </div>
+        </div>
+        <div class="tlrow">
+          <div class="k">
+            <div class="w">W47</div>
+            <div class="rng">11.16 (월) ~</div>
+            <div class="ph">D+31</div>
+            <div class="st">단계 5</div>
+          </div>
+          <div class="c">
+            <h4>종료 결과 경영진 보고</h4>
+            <ul class="acts">
+            <li><span class="dt">11.16</span>전환율 · 민원 건수 보고, 리다이렉트 유지 기간 및 시스템 폐기 · 개인정보 처리 계획 확정</li>
+            </ul>
+            <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>결과 보고서</span></div>
+          </div>
+        </div>
       </div>
       <p class="foot">※ 주관 부서명은 일반 조직 기준으로 표기 — 실제 조직도에 맞춘 수정 <b>확인 필요</b>.<br>
         ※ 「법정 기한」 2건(09.11 1차 공지 개시 · 09.16 고지 마감선)의 근거와 적용 해석은 준법감시부 · 법무팀 최종 확인 전제.</p>
@@ -563,86 +620,11 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
     </div>
   </section>
 
-  <!-- ══════════ 02 고객 세그먼트 · 채널 계획 ══════════ -->
+  <!-- ══════════ 02 리스크 · 대응 ══════════ -->
   <div class="rule thick"></div>
   <section class="sec">
     <div class="sechead">
       <div class="secnum">02</div>
-      <div>
-        <h2 class="sect">고객 세그먼트 · 채널 계획</h2>
-        <p class="sectsub">전환 실패가 곧 주문 수단 상실로 이어지는 세그먼트 A · E에 접촉 자원을 집중한다.</p>
-      </div>
-    </div>
-
-    <div class="blk">
-      <h3>세그먼트별 대응</h3>
-      <p class="h3note">세그먼트별 규모는 W37(09.07) 명부 추출로 확정 · 현재 확인 필요</p>
-      <div class="kpis spec">
-        <div class="kpi">
-          <div class="label">세그먼트 A</div>
-          <div class="val g">WTS 단독 이용</div>
-          <div class="note">유선 개별 접촉 전량 + 전 회차 이메일 · LMS + 전환 완료 개별 추적</div>
-        </div>
-        <div class="kpi">
-          <div class="label">세그먼트 B</div>
-          <div class="val">타 채널 병행</div>
-          <div class="note">팝업 · 배너 + 전 회차 LMS. 개별 접촉 대상에서 제외</div>
-        </div>
-        <div class="kpi">
-          <div class="label">세그먼트 C</div>
-          <div class="val">장기 미접속</div>
-          <div class="note">6개월 이상 미접속. 이메일 · LMS 발송 후 발송 로그를 고지 이행 증빙으로 보존</div>
-        </div>
-        <div class="kpi">
-          <div class="label">세그먼트 D</div>
-          <div class="val">법인 · 기관</div>
-          <div class="note">담당 RM 개별 방문 · 유선 + 계약 부속 문서 송부. W40 개시</div>
-        </div>
-        <div class="kpi">
-          <div class="label">세그먼트 E</div>
-          <div class="val g">고령 · 취약</div>
-          <div class="note">전담 상담 창구 + 지점 방문 전환 지원 + 유선 반복 안내</div>
-        </div>
-      </div>
-      <p class="foot">※ 계약서에 특정 채널 제공이 명시된 법인 고객이 확인되면 법무팀 검토 후 개별 합의 절차로 전환한다 — W37 검토 결과에 따름.</p>
-    </div>
-
-    <div class="blk">
-      <h3>회차별 채널 계획</h3>
-      <p class="h3note">주 = 주 채널 · 보조 = 보조 채널 · — = 미사용. 휴장이 많은 구간은 이메일 · LMS를 주 채널로 둔다</p>
-      <div class="cmpwrap">
-        <table class="cmp">
-          <thead>
-            <tr><th>채널</th><th class="mid">1차<br>W37 · D−35</th><th class="mid">2차<br>W39 · D−24</th><th class="mid">3차<br>W40 · D−14</th><th class="mid">4차<br>W41 · D−7</th><th class="mid">최종<br>W42 · D−1</th></tr>
-          </thead>
-          <tbody>
-            <tr><th>홈페이지 공지사항 · 팝업</th><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>WTS · PC웹 로그인 팝업</th><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>WTS · PC웹 전면 상시 배너</th><td class="ch x">—</td><td class="ch x">—</td><td class="ch s">보조</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>이메일</th><td class="ch">주</td><td class="ch s">보조</td><td class="ch">주</td><td class="ch s">보조</td><td class="ch">주</td></tr>
-            <tr><th>LMS · 알림톡</th><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>MTS · 신 HTS 내 팝업</th><td class="ch s">보조</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch s">보조</td></tr>
-            <tr><th>앱 푸시</th><td class="ch x">—</td><td class="ch">주</td><td class="ch s">보조</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>콜센터 IVR 안내 멘트</th><td class="ch x">—</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td></tr>
-            <tr><th>유선 개별 접촉</th><td class="ch x">—</td><td class="ch x">—</td><td class="ch">주</td><td class="ch">주</td><td class="ch s">보조</td></tr>
-            <tr><th>지점 POP · 안내물</th><td class="ch s">보조</td><td class="ch">주</td><td class="ch">주</td><td class="ch">주</td><td class="ch s">보조</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="foot">※ 세그먼트 C(장기 미접속)는 팝업 노출이 발생하지 않으므로 이메일 · LMS 발송 로그를 고지 이행 증빙으로 별도 보존한다.</p>
-    </div>
-
-    <div class="secfoot">
-      <span class="lg"><span class="cimark" role="img" aria-label="Hanwha Investment&amp;Securities"></span></span>
-      <span>WTS·PC웹 종료 공지 계획 · 02 고객 세그먼트 · 채널 계획</span>
-    </div>
-  </section>
-
-  <!-- ══════════ 03 리스크 · 대응 ══════════ -->
-  <div class="rule thick"></div>
-  <section class="sec">
-    <div class="sechead">
-      <div class="secnum">03</div>
       <div>
         <h2 class="sect">리스크 · 대응</h2>
         <p class="sectsub">「중점 관리」 3건은 종료 일정 준수와 직접 연결되며, 통제 방안의 실행 여부가 10.16 종료 가능성을 결정한다.</p>
@@ -669,14 +651,14 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
               <td>W40(10.02) 개별 고지 후 W42(10.15) 장 종료 후 일괄 취소, <b>취소 내역 개별 통지로 증빙 확보</b></td>
             </tr>
             <tr>
-              <th>세그먼트 A · E<br>주문 수단 상실</th>
-              <td><span class="grade best">중점 관리</span><br>공지 팝업만으로 전환 미담보</td>
+              <th>WTS 단독 이용 · 고령<br>고객 주문 수단 상실</th>
+              <td><span class="grade best">중점 관리</span><br>타 채널 이용 이력이 없어 공지 팝업만으로 전환 미담보</td>
               <td>종료 직후 첫 거래일(10.19) 민원 집중, 고령 고객 이탈</td>
               <td>W40부터 유선 개별 접촉 및 전환 완료 추적. <b>W42(10.12) 잔여 명부 재추출 후 최종 접촉</b></td>
             </tr>
             <tr>
               <th>휴장 집중에 따른<br>고지 노출 부족</th>
-              <td><span class="grade ok">상시 관리</span><br>42일 중 16일 휴장</td>
+              <td><span class="grade ok">상시 관리</span><br>종료일까지 42일 중 16일 휴장</td>
               <td>로그인 팝업 기반 고지 효과 감소, 미인지 고객 잔존</td>
               <td>이메일 · LMS · 알림톡을 주 채널로 승격, 휴장 구간 홈페이지 상시 배너 유지</td>
             </tr>
@@ -709,7 +691,7 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
         <strong>보고 전 확인이 필요한 사항</strong>
         <ul class="rep">
           <li>전자금융거래 약관 변경에 따른 <b>시행 1개월 전 고지 의무의 적용 여부</b> — 준법감시부 · 법무팀 최종 확인. 채널 폐지가 약관 변경에 해당하는지 여부가 09.16 고지 마감선의 근거가 된다</li>
-          <li>세그먼트별 고객 규모 및 콜센터 증원 소요 인건비 — W37(09.07) 명부 추출 후 수치 확정 및 본 계획 보완</li>
+          <li>고객 규모 및 콜센터 증원 소요 인건비 — W37(09.07) 명부 추출 후 수치 확정 및 본 계획 보완</li>
           <li>주관 부서명 — 실제 조직도 기준으로 수정</li>
           <li>종료 시각(10.16 18:00) 및 리다이렉트 유지 기간(안 6개월) — IT운영부 확인 후 확정</li>
         </ul>
@@ -718,7 +700,7 @@ table.cmp td.wk{font-weight:800;color:var(--ink);white-space:nowrap}
 
     <div class="secfoot">
       <span class="lg"><span class="cimark" role="img" aria-label="Hanwha Investment&amp;Securities"></span></span>
-      <span>WTS·PC웹 종료 공지 계획 · 03 리스크 · 대응</span>
+      <span>WTS·PC웹 종료 공지 계획 · 02 리스크 · 대응</span>
     </div>
   </section>
 
