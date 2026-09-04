@@ -322,11 +322,13 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 .tlrow .k .w{font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.38;color:var(--ink)}
 .tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
 .tlrow .k .mw{font-size:15px;font-weight:700;color:var(--ink-2);margin-top:7px;line-height:1.45}
-.tlrow .k .ph{font-size:14px;font-weight:600;color:var(--mute);margin-top:3px;line-height:1.4;white-space:nowrap}
-.tlrow .k .st{font-size:14px;font-weight:600;color:var(--mute);line-height:1.4;white-space:nowrap}
+.tlrow .k .st{font-size:14px;font-weight:600;color:var(--mute);margin-top:4px;line-height:1.4;white-space:nowrap}
 .tlrow .c{position:relative;padding:22px 0 26px 30px}
 .tlrow .c h4{font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.4;margin-bottom:11px}
 .tlrow .c h4 .grade{margin-bottom:0;margin-left:9px;vertical-align:2px}
+.tlrow .c .dgrp{margin-bottom:15px}
+.tlrow .c .dgrp:last-of-type{margin-bottom:0}
+.tlrow .c .dhd{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:6px}
 .tlrow .c .own{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);
   font-size:14px;color:var(--ink-2);line-height:1.6;display:flex;flex-wrap:wrap;gap:4px 26px}
 .tlrow .c .own b{color:var(--mute);font-weight:700;margin-right:7px}
@@ -337,8 +339,7 @@ ul.acts li{position:relative;padding-left:15px;margin-bottom:7px;line-height:1.6
 ul.acts li:last-child{margin-bottom:0}
 ul.acts li:before{content:"–";position:absolute;left:0;top:0;color:var(--mute);font-weight:700}
 ul.acts li b{color:var(--ink);font-weight:700}
-ul.acts li .dt{font-weight:700;color:var(--ink-2);margin-right:5px}
-ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
+ul.acts li b{color:var(--ink);font-weight:700}
 
 @media (max-width:900px){
   .tl:before{left:5px}
@@ -387,7 +388,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="stepcol">
             <span class="stepnum">단계 0</span>
             <span class="nowmark">현재 단계</span>
-            <span class="when">09.04 ~ 09.10<br>D−42 ~ D−36</span>
+            <span class="when">09.04 ~ 09.10</span>
           </div>
           <div>
             <div class="stept">준비 — 내부 확정 및 준법 검토</div>
@@ -397,7 +398,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         <div class="step">
           <div class="stepcol">
             <span class="stepnum">단계 1</span>
-            <span class="when">09.11 ~ 09.23<br>D−35 ~ D−23</span>
+            <span class="when">09.11 ~ 09.23</span>
           </div>
           <div>
             <div class="stept">고지 개시 — 1차 · 2차 공지</div>
@@ -407,7 +408,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         <div class="step">
           <div class="stepcol">
             <span class="stepnum">단계 2</span>
-            <span class="when">09.24 ~ 10.08<br>D−22 ~ D−8</span>
+            <span class="when">09.24 ~ 10.08</span>
           </div>
           <div>
             <div class="stept">전환 유도 — 세그먼트별 개별 접촉</div>
@@ -417,11 +418,11 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         <div class="step">
           <div class="stepcol">
             <span class="stepnum">단계 3</span>
-            <span class="when">10.09 ~ 10.15<br>D−7 ~ D−1</span>
+            <span class="when">10.09 ~ 10.15</span>
           </div>
           <div>
             <div class="stept">종료 임박 — 상시 노출 및 주문 정리</div>
-            <div class="stepd">WTS·PC웹 전면 배너를 상시 노출로 전환하고 콜센터를 한시 증원한다. D−1 장 종료 후 <b>예약·조건부주문을 일괄 취소</b>하고 내역을 개별 통지한다.</div>
+            <div class="stepd">WTS·PC웹 전면 배너를 상시 노출로 전환하고 콜센터를 한시 증원한다. 10.15 장 종료 후 <b>예약·조건부주문을 일괄 취소</b>하고 내역을 개별 통지한다.</div>
           </div>
         </div>
         <div class="step">
@@ -437,11 +438,11 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         <div class="step">
           <div class="stepcol">
             <span class="stepnum">단계 5</span>
-            <span class="when">10.19 ~ 11.16<br>D+1 ~ D+31</span>
+            <span class="when">10.19 ~ 11.16</span>
           </div>
           <div>
             <div class="stept">사후 관리 — VOC 대응 및 결과 보고</div>
-            <div class="stepd">종료 후 첫 거래일 VOC 실시간 모니터링, 미전환 고객 2차 접촉, 민원 유형별 원인 분석. D+31에 전환율·민원 건수와 시스템 폐기 계획을 보고한다.</div>
+            <div class="stepd">종료 후 첫 거래일 VOC 실시간 모니터링, 미전환 고객 2차 접촉, 민원 유형별 원인 분석. 11.16에 전환율·민원 건수와 시스템 폐기 계획을 보고한다.</div>
           </div>
         </div>
       </div>
@@ -450,39 +451,36 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
 
     <div class="blk">
       <h3>주 단위 실행 일정</h3>
-      <p class="h3note">각 주는 월요일 시작 기준이며, 괄호 없는 보조 표기는 해당 주 목요일이 속한 달의 주차 · 「법정 기한」 항목은 지연 시 종료일 순연이 불가피하다</p>
+      <p class="h3note">각 주는 월요일 시작 기준이며, 보조 표기는 해당 주 목요일이 속한 달의 주차</p>
       <div class="tl">
-        <div class="tlrow">
-          <div class="k">
-            <div class="w">09.04 (금)</div>
-            <div class="mw">9월 1째주</div>
-            <div class="ph">D−42</div>
-            <div class="st">단계 0</div>
-          </div>
-          <div class="c">
-            <h4>경영진 보고 및 계획 승인</h4>
-            <ul class="acts">
-            <li><span class="dt">09.04</span>본 계획 승인 및 <b>실행 착수</b></li>
-            </ul>
-            <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>본 보고서</span></div>
-          </div>
-        </div>
         <div class="tlrow hard">
           <div class="k">
             <div class="w">09.07 (월) ~ 09.13 (일)</div>
             <div class="mw">9월 2째주</div>
-            <div class="ph">D−39 ~ D−33</div>
             <div class="st">단계 0 → 1</div>
           </div>
           <div class="c">
             <h4>1차 대고객 공지 개시</h4>
-            <ul class="acts">
-            <li><span class="dt">09.07</span>공지문 초안 작성 및 대체 채널(MTS · 신 HTS) 전환 가이드 제작</li>
-            <li><span class="dt">09.07</span>대상 고객 세그먼트 명부 추출, 법인 계약서 채널 조항 병행 검토</li>
-            <li><span class="dt">09.11</span>준법감시 · 법무 검토 완료 및 CCO 협의 종결 — <b>공지문 문구 확정</b></li>
-            <li><span class="grade best">법정 기한</span><span class="dt">09.11</span><b>1차 대고객 공지 개시</b> — 홈페이지 공지사항 · 팝업, WTS · PC웹 로그인 팝업, 이메일 · LMS 전량 발송</li>
-            <li><span class="dt">09.12</span>감독당국 시스템 변경 보고 및 거래소 · 협회 통보 접수</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">09.07</div>
+              <ul class="acts">
+                <li>공지문 초안 작성 및 대체 채널(MTS · 신 HTS) 전환 가이드 제작</li>
+                <li>대상 고객 세그먼트 명부 추출, 법인 계약서 채널 조항 병행 검토</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">09.11</div>
+              <ul class="acts">
+                <li>준법감시 · 법무 검토 완료 및 CCO 협의 종결 — <b>공지문 문구 확정</b></li>
+                <li><b>1차 대고객 공지 개시</b> — 홈페이지 공지사항 · 팝업, WTS · PC웹 로그인 팝업, 이메일 · LMS 전량 발송</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">09.12</div>
+              <ul class="acts">
+                <li>감독당국 시스템 변경 보고 및 거래소 · 협회 통보 접수</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>디지털플랫폼 · 준법감시부 · 데이터전략</span><span><b>산출물</b>공지문 확정본 · 검토 결과서 · 1차 발송 리포트</span></div>
           </div>
         </div>
@@ -490,15 +488,22 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">09.14 (월) ~ 09.20 (일)</div>
             <div class="mw">9월 3째주</div>
-            <div class="ph">D−32 ~ D−26</div>
             <div class="st">단계 1</div>
           </div>
           <div class="c">
             <h4>법정 고지 마감선 통과</h4>
-            <ul class="acts">
-            <li><span class="grade best">법정 기한</span><span class="dt">09.16</span><b>법정 고지 마감선</b> — 미개시 시 이 시점에 종료일 순연 결정을 상신</li>
-            <li><span class="dt">09.18</span>콜센터 응대 스크립트 · FAQ 배포, IVR 안내 멘트 추가, 지점 POP 게시</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">09.16</div>
+              <ul class="acts">
+                <li><b>법정 고지 마감선</b> — 미개시 시 이 시점에 종료일 순연 결정을 상신</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">09.18</div>
+              <ul class="acts">
+                <li>콜센터 응대 스크립트 · FAQ 배포, IVR 안내 멘트 추가, 지점 POP 게시</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>준법감시부 · 고객지원부</span><span><b>산출물</b>고지 이행 확인서 · 스크립트 · FAQ</span></div>
           </div>
         </div>
@@ -506,15 +511,22 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">09.21 (월) ~ 09.27 (일)</div>
             <div class="mw">9월 4째주</div>
-            <div class="ph">D−25 ~ D−19</div>
             <div class="st">단계 1 → 2</div>
           </div>
           <div class="c">
             <h4>2차 공지 및 추석 연휴 대응</h4>
-            <ul class="acts">
-            <li><span class="dt">09.22</span><b>2차 공지</b> — 추석 전 리마인드. 앱 푸시 및 MTS · HTS 내 팝업 병행</li>
-            <li><span class="dt">09.24~26</span>추석 연휴 — 신규 발송 중단, 홈페이지 상시 배너만 유지 <b>(09.24~09.25 증시 휴장)</b></li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">09.22</div>
+              <ul class="acts">
+                <li><b>2차 공지</b> — 추석 전 리마인드. 앱 푸시 및 MTS · HTS 내 팝업 병행</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">09.24 ~ 09.26</div>
+              <ul class="acts">
+                <li>추석 연휴 — 신규 발송 중단, 홈페이지 상시 배너만 유지 <b>(09.24~09.25 증시 휴장)</b></li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>2차 발송 리포트</span></div>
           </div>
         </div>
@@ -522,17 +534,24 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">09.28 (월) ~ 10.04 (일)</div>
             <div class="mw">10월 1째주</div>
-            <div class="ph">D−18 ~ D−12</div>
             <div class="st">단계 2</div>
           </div>
           <div class="c">
             <h4>개별 접촉 개시 및 3차 공지</h4>
-            <ul class="acts">
-            <li><span class="dt">09.30</span>WTS 단독 이용 고객 유선 접촉 개시 — 일일 목표 콜 수 및 접촉 완료율 관리</li>
-            <li><span class="dt">09.30</span>법인 · 기관 고객 담당 RM 개별 안내 및 계약 부속 문서 송부</li>
-            <li><span class="dt">10.02</span><b>3차 공지</b> — 예약 · 조건부 · 자동감시주문 보유 고객 대상 일괄 취소 예정 개별 고지</li>
-            <li><span class="dt">10.02</span>MTS · 신 HTS 동시접속 부하 테스트 — WTS 최대 동접 이관 시나리오 검증</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">09.30</div>
+              <ul class="acts">
+                <li>WTS 단독 이용 고객 유선 접촉 개시 — 일일 목표 콜 수 및 접촉 완료율 관리</li>
+                <li>법인 · 기관 고객 담당 RM 개별 안내 및 계약 부속 문서 송부</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">10.02</div>
+              <ul class="acts">
+                <li><b>3차 공지</b> — 예약 · 조건부 · 자동감시주문 보유 고객 대상 일괄 취소 예정 개별 고지</li>
+                <li>MTS · 신 HTS 동시접속 부하 테스트 — WTS 최대 동접 이관 시나리오 검증</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>고객지원부 · 법인영업부 · IT운영부</span><span><b>산출물</b>접촉 현황 일보 · 계약 변경 통지문 · 부하 테스트 결과</span></div>
           </div>
         </div>
@@ -540,16 +559,24 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">10.05 (월) ~ 10.11 (일)</div>
             <div class="mw">10월 2째주</div>
-            <div class="ph">D−11 ~ D−5</div>
             <div class="st">단계 2 → 3</div>
           </div>
           <div class="c">
             <h4>취약 고객 지원 및 4차 공지</h4>
-            <ul class="acts">
-            <li><span class="dt">10.05</span>고령 · 취약 고객 전담 상담 및 지점 방문 전환 지원 개시</li>
-            <li><span class="dt">10.09</span><b>4차 공지</b> — WTS · PC웹 전면 배너를 상시 노출로 전환 (한글날 휴장이므로 발송은 10.08 선행)</li>
-            <li><span class="dt">휴장</span>10.05 개천절 대체공휴일 · 10.09 한글날 — 상담 창구는 정상 운영</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">10.05</div>
+              <ul class="acts">
+                <li>고령 · 취약 고객 전담 상담 및 지점 방문 전환 지원 개시</li>
+                <li>개천절 대체공휴일 — 증시 휴장, 상담 창구는 정상 운영</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">10.09</div>
+              <ul class="acts">
+                <li><b>4차 공지</b> — WTS · PC웹 전면 배너를 상시 노출로 전환 (한글날 휴장이므로 발송은 10.08 선행)</li>
+                <li>한글날 — 증시 휴장, 상담 창구는 정상 운영</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>소비자보호부 · 디지털플랫폼</span><span><b>산출물</b>지원 실적 · 4차 발송 리포트</span></div>
           </div>
         </div>
@@ -557,17 +584,35 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">10.12 (월) ~ 10.18 (일)</div>
             <div class="mw">10월 3째주</div>
-            <div class="ph">D−4 ~ D+2</div>
             <div class="st">단계 3 → 4</div>
           </div>
           <div class="c">
             <h4>최종 공지 및 서비스 종료 실행<span class="grade best">종료 실행</span></h4>
-            <ul class="acts">
-            <li><span class="dt">10.12</span>콜센터 상담 인력 한시 증원 투입, 미전환 고객 잔여 명부 재추출</li>
-            <li><span class="dt">10.13</span>종료 후 안내 페이지 및 접속 차단 스크립트 배포 준비 완료</li>
-            <li><span class="dt">10.15</span><b>최종 공지</b> 및 종료 전일 안내 — 장 종료 후 예약 · 조건부주문 일괄 취소 실행, 취소 내역 개별 통지</li>
-            <li><span class="dt">10.16</span><b>정규장 종료 후 18:00 WTS · PC웹 접속 종료.</b> 안내 페이지 리다이렉트 전환, 종료 완료 보고</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">10.12</div>
+              <ul class="acts">
+                <li>콜센터 상담 인력 한시 증원 투입, 미전환 고객 잔여 명부 재추출</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">10.13</div>
+              <ul class="acts">
+                <li>종료 후 안내 페이지 및 접속 차단 스크립트 배포 준비 완료</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">10.15</div>
+              <ul class="acts">
+                <li><b>최종 공지</b> 및 종료 전일 안내</li>
+                <li>장 종료 후 예약 · 조건부주문 일괄 취소 실행, 취소 내역 개별 통지</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">10.16</div>
+              <ul class="acts">
+                <li><b>정규장 종료 후 18:00 WTS · PC웹 접속 종료.</b> 안내 페이지 리다이렉트 전환, 종료 완료 보고</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>고객지원부 · IT운영부 · 디지털플랫폼</span><span><b>산출물</b>취소 처리 내역서 · 종료 완료 보고</span></div>
           </div>
         </div>
@@ -575,14 +620,16 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">10.19 (월) ~ 10.25 (일)</div>
             <div class="mw">10월 4째주</div>
-            <div class="ph">D+1 ~ D+7</div>
             <div class="st">단계 5</div>
           </div>
           <div class="c">
             <h4>종료 후 첫 거래일 모니터링</h4>
-            <ul class="acts">
-            <li><span class="dt">10.19</span>VOC · 콜 인바운드 실시간 모니터링, 대체 채널 접속 지표 점검</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">10.19</div>
+              <ul class="acts">
+                <li>VOC · 콜 인바운드 실시간 모니터링, 대체 채널 접속 지표 점검</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>고객지원부</span><span><b>산출물</b>VOC 일일 리포트</span></div>
           </div>
         </div>
@@ -590,15 +637,22 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">10.26 (월) ~ 11.15 (일)</div>
             <div class="mw">10월 5째주 ~ 11월 2째주</div>
-            <div class="ph">D+8 ~ D+28</div>
             <div class="st">단계 5</div>
           </div>
           <div class="c">
             <h4>미전환 고객 대응 및 민원 분석</h4>
-            <ul class="acts">
-            <li><span class="dt">10.30</span>미전환 고객 2차 개별 접촉</li>
-            <li><span class="dt">~11.15</span>민원 발생 건 유형별 원인 분석 및 대체 채널 전환율 집계</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">10.30</div>
+              <ul class="acts">
+                <li>미전환 고객 2차 개별 접촉</li>
+              </ul>
+            </div>
+            <div class="dgrp">
+              <div class="dhd">~ 11.15</div>
+              <ul class="acts">
+                <li>민원 발생 건 유형별 원인 분석 및 대체 채널 전환율 집계</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>소비자보호부</span><span><b>산출물</b>민원 분석서</span></div>
           </div>
         </div>
@@ -606,20 +660,22 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
           <div class="k">
             <div class="w">11.16 (월)</div>
             <div class="mw">11월 3째주</div>
-            <div class="ph">D+31</div>
             <div class="st">단계 5</div>
           </div>
           <div class="c">
             <h4>종료 결과 경영진 보고</h4>
-            <ul class="acts">
-            <li><span class="dt">11.16</span>전환율 · 민원 건수 보고, 리다이렉트 유지 기간 및 시스템 폐기 · 개인정보 처리 계획 확정</li>
-            </ul>
+            <div class="dgrp">
+              <div class="dhd">11.16</div>
+              <ul class="acts">
+                <li>전환율 · 민원 건수 보고, 리다이렉트 유지 기간 및 시스템 폐기 · 개인정보 처리 계획 확정</li>
+              </ul>
+            </div>
             <div class="own"><span><b>주관</b>디지털플랫폼</span><span><b>산출물</b>결과 보고서</span></div>
           </div>
         </div>
       </div>
       <p class="foot">※ 주관 부서명은 일반 조직 기준으로 표기 — 실제 조직도에 맞춘 수정 <b>확인 필요</b>.<br>
-        ※ 「법정 기한」 2건(09.11 1차 공지 개시 · 09.16 고지 마감선)의 근거와 적용 해석은 준법감시부 · 법무팀 최종 확인 전제.</p>
+        ※ 09.11 1차 공지 개시와 09.16 고지 마감선은 전자금융거래 약관 변경에 따른 법정 고지기간과 직결되는 일정이며, 지연 시 종료일 순연이 불가피하다. 근거와 적용 해석은 준법감시부 · 법무팀 최종 확인 전제.</p>
     </div>
 
     <div class="secfoot">
