@@ -310,11 +310,16 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 
 /* ── 세로 타임라인 : 레일·아이콘은 영역 최좌측, 헤더는 상세 박스 위에 적층 ── */
 .tl{position:relative}
-.tl:before{content:"";position:absolute;left:8px;top:30px;bottom:0;width:1px;background:var(--line)}
-.tlrow{position:relative;padding:22px 0 26px 40px}
-.tlrow + .tlrow{border-top:1px solid var(--line)}
-.tlrow:last-child:after{content:"";position:absolute;left:0;top:38px;bottom:0;
+.tlmonth{margin-left:40px;padding:32px 0 11px;font-size:24.5px;font-weight:800;
+  letter-spacing:-.025em;color:var(--ink);border-bottom:2px solid var(--ink)}
+.tlmonth:first-child{padding-top:2px}
+.tlgrp{position:relative}
+.tlgrp:before{content:"";position:absolute;left:8px;top:30px;bottom:0;width:1px;background:var(--line)}
+.tlgrp .tlrow:last-child:after{content:"";position:absolute;left:0;top:38px;bottom:0;
   width:18px;background:var(--paper)}
+.tlrow{position:relative;padding:22px 0 26px 40px}
+.tlrow + .tlrow:before{content:"";position:absolute;left:40px;right:0;top:0;height:1px;
+  background:var(--line)}
 .tmark{position:absolute;left:0.5px;top:22px;width:16px;height:16px;line-height:0;
   color:var(--ink);background:var(--paper);border-radius:50%}
 .tmark svg{display:block;width:100%;height:100%}
@@ -327,7 +332,8 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 .tlrow .k .w{font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.38;color:var(--ink)}
 .tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
 .tlrow .k h4{font-size:18px;font-weight:800;letter-spacing:-.015em;line-height:1.4;margin:7px 0 0;color:var(--ink)}
-.tlrow .k h4 .grade{margin:0 0 0 10px;vertical-align:2px}
+.tlrow .k .tlbadge{margin-bottom:9px}
+.tlrow .k .tlbadge .grade{margin:0}
 .tlrow .k .mw{font-size:14.5px;font-weight:600;color:var(--mute);margin-top:7px;line-height:1.45}
 
 .tlrow .item>summary{padding:13px 16px;font-size:16px}
@@ -345,6 +351,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
 
 @media (max-width:900px){
   .tlrow{padding-left:32px}
+  .tlmonth{margin-left:32px;font-size:21.5px}
+  .tlrow + .tlrow:before{left:32px}
 }
 @media print{.tlrow{break-inside:avoid}}
 </style>
@@ -448,6 +456,8 @@ ul.acts li b{color:var(--ink);font-weight:700}
       <h3>주 단위 실행 일정</h3>
       <p class="h3note">각 주는 월요일 시작 기준이며, 보조 표기는 해당 주 목요일이 속한 달의 주차</p>
       <div class="tl">
+        <div class="tlmonth">9월</div>
+        <div class="tlgrp">
         <div class="tlrow hard">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="k">
@@ -531,6 +541,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             </div>
           </details>
         </div>
+        </div>
+        <div class="tlmonth">10월</div>
+        <div class="tlgrp">
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="k">
@@ -588,8 +601,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
         <div class="tlrow dday">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="k">
+            <div class="tlbadge"><span class="grade best">종료 실행</span></div>
             <div class="w">10.12 (월) ~ 10.18 (일)</div>
-            <h4>최종 공지 및 서비스 종료 실행<span class="grade best">종료 실행</span></h4>
+            <h4>최종 공지 및 서비스 종료 실행</h4>
             <div class="mw">10월 3째주</div>
           </div>
           <details class="item">
@@ -667,6 +681,9 @@ ul.acts li b{color:var(--ink);font-weight:700}
             </div>
           </details>
         </div>
+        </div>
+        <div class="tlmonth">11월</div>
+        <div class="tlgrp">
         <div class="tlrow">
           <span class="tmark" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.7" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.3V8.2l2.6 1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="k">
@@ -685,6 +702,7 @@ ul.acts li b{color:var(--ink);font-weight:700}
             </div>
             </div>
           </details>
+        </div>
         </div>
       </div>
     </div>
