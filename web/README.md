@@ -61,7 +61,8 @@ Node가 있으면 `npx serve web` 도 동일하다.
 | `swayDeg` | 좌우로 흔들리는 각도 |
 | `removeBackground` | 배경 자동 제거 on/off |
 
-에셋 크기는 `app.css` 의 `#asset { width: ... }` 에서 바꾼다.
+에셋 크기는 `app.css` 의 `#asset { width: ... }`, 제목 문구는 각 HTML 의
+`.wordmark` 에서 바꾼다.
 
 ## GLB 버전 (model-3d.html)
 
