@@ -18,24 +18,27 @@ const CONFIG = {
   assets: [
     // M — 기준
     { url: './images/asset-cutout.png',
-      alt: '격자 무늬로 부풀어 오른 M 형태의 3D 에셋',
+      alt: '파란 털 질감의 M 형태 3D 에셋',
       phase: 0.0, speedMul: 1.00, ampMul: 1.00,
       easeMul: 1.00, tiltMul: 1.00, driftMul: 1.00,
       baseRotY: -5, baseRotZ: -1.5, scale: 1.00 },
 
     // 1 — 더 느리게 따라오고, 덜 기울고, 기본 각도부터 다르다
     { url: './images/asset-1-cutout.png',
-      alt: '파란 얼룩무늬로 부풀어 오른 숫자 1 형태의 3D 에셋',
+      alt: '파란 얼룩무늬 크롬 재질의 숫자 1 형태 3D 에셋',
       phase: 2.1, speedMul: 0.84, ampMul: 1.24,
       easeMul: 0.55, tiltMul: 0.58, driftMul: 0.72,
       baseRotY: 10, baseRotZ: 2.5, scale: 1.02 },
   ],
 
   /* 배경 제거 — 스크린샷의 단색 배경을 투명하게 만든다.
-     위 *-cutout.png 는 배경을 미리 제거해 둔 파일이라 꺼 두었고,
+     현재 에셋은 원본이 이미 투명 PNG 라서 꺼 두었고,
      덕분에 index.html 을 더블클릭해서 열어도 동작한다.
-     배경이 있는 새 캡처를 쓸 때만 true 로 바꾸고 로컬 서버로 연다.
-     tolerance: 클수록 과감하게 지운다. M 은 34, 1 은 24가 가장 깨끗했다. */
+
+     배경이 있는 캡처를 쓸 때만 true 로 바꾸고 로컬 서버로 연다.
+     단, 털처럼 경계가 부드러운 에셋에는 쓰지 말 것 — flood fill 은
+     반투명한 털끝을 뭉갠다. 그런 에셋은 투명 PNG 로 받아야 한다.
+     tolerance: 클수록 과감하게 지운다. */
   removeBackground: false,
   tolerance: 30,
 
