@@ -190,6 +190,41 @@ function loadAsset(url, isFallback) {
 loadAsset(CONFIG.assetUrl, false);
 
 /* ------------------------------------------------------------------
+ * 이미지 바로 넣어보기
+ *
+ * asset.png 로 저장하기 전에 결과를 미리 보고 싶을 때,
+ * 파일을 창에 끌어다 놓거나 Ctrl+V 로 붙여넣으면 바로 반영된다.
+ * (새로고침하면 다시 asset.png 를 읽는다)
+ * ------------------------------------------------------------------ */
+function useLocalFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    notice.hidden = true;
+    loadAsset(reader.result, false);
+  };
+  reader.readAsDataURL(file);
+}
+
+window.addEventListener('dragover', (e) => e.preventDefault());
+window.addEventListener('drop', (e) => {
+  e.preventDefault();
+  useLocalFile(e.dataTransfer && e.dataTransfer.files[0]);
+});
+
+window.addEventListener('paste', (e) => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (const item of items) {
+    if (item.type && item.type.startsWith('image/')) {
+      useLocalFile(item.getAsFile());
+      e.preventDefault();
+      return;
+    }
+  }
+});
+
+/* ------------------------------------------------------------------
  * 포인터 입력 — 화면 중심 기준 -1 ~ 1
  * ------------------------------------------------------------------ */
 const target = { x: 0, y: 0 };
