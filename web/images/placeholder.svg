@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" width="420" height="420" role="img" aria-label="임시 3D 에셋">
+  <defs>
+    <!-- 몸통 색: 위쪽이 밝고 아래로 어두워지는 파랑 -->
+    <linearGradient id="body" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0%"   stop-color="#5b9bff"/>
+      <stop offset="45%"  stop-color="#2f6bf0"/>
+      <stop offset="100%" stop-color="#1633b4"/>
+    </linearGradient>
+
+    <!-- 왼쪽 위에서 들어오는 하이라이트 -->
+    <radialGradient id="hl" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.62"/>
+      <stop offset="55%"  stop-color="#cfe0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- 아래쪽 어두운 면 -->
+    <linearGradient id="shade" x1="0" y1="0.45" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#0a1b52" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- 격자 무늬 -->
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0v24" fill="none" stroke="#eaf1ff" stroke-opacity="0.62" stroke-width="2.2"/>
+    </pattern>
+
+    <!-- 두꺼운 선으로 그린 M 을 마스크로 사용 → 둥근 풍선 형태 -->
+    <mask id="shape">
+      <path d="M72 352 V96 L210 252 L348 96 V352"
+            fill="none" stroke="#fff" stroke-width="82"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+
+  <g mask="url(#shape)">
+    <rect width="420" height="420" fill="url(#body)"/>
+    <rect width="420" height="420" fill="url(#grid)"/>
+    <rect width="420" height="420" fill="url(#shade)"/>
+    <ellipse cx="140" cy="120" rx="190" ry="165" fill="url(#hl)"/>
+  </g>
+
+  <!-- 위쪽 엣지 광택 (마스크 안쪽에서 얇게) -->
+  <g mask="url(#shape)">
+    <path d="M72 352 V96 L210 252 L348 96 V352"
+          fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="10"
+          stroke-linecap="round" stroke-linejoin="round"
+          transform="translate(-2,-30)"/>
+  </g>
+</svg>
