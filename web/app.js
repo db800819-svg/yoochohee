@@ -6,16 +6,19 @@
  * ================================================================== */
 
 const CONFIG = {
-  /* 에셋 이미지 경로. 없으면 placeholder.svg 로 대체된다. */
-  assetUrl: './images/asset.png',
+  /* 에셋 이미지 경로. 없으면 placeholder.svg 로 대체된다.
+     asset-cutout.png 은 배경을 미리 제거해 둔 파일이라 캔버스 처리가
+     필요 없다 → index.html 을 더블클릭해서 열어도 그대로 동작한다. */
+  assetUrl: './images/asset-cutout.png',
   fallbackUrl: './images/placeholder.svg',
 
   /* 배경 제거 — 스크린샷의 단색 배경을 투명하게 만든다.
-     enabled: false 로 두면 원본을 그대로 쓴다(이미 투명 PNG인 경우).
-     tolerance: 클수록 과감하게 지운다. 배경이 남으면 올리고,
-                에셋이 깎이면 내린다. (기본 30, 범위 10~60) */
-  removeBackground: true,
-  tolerance: 30,
+     위 asset-cutout.png 은 이미 투명하므로 꺼 둔다.
+     새로 캡처한 이미지(배경 있는 원본)를 쓸 때만 true 로 바꾸고,
+     그때는 로컬 서버로 열어야 한다.
+     tolerance: 클수록 과감하게 지운다. 이 에셋에는 34가 가장 깨끗했다. */
+  removeBackground: false,
+  tolerance: 34,
 
   /* 움직임 */
   tiltX: 11,      // 마우스 상하 → 기울기 (deg)

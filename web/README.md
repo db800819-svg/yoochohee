@@ -15,7 +15,23 @@ Tripo 무료 플랜에서 GLB 내보내기가 막히면 `index.html` 쪽을 쓰�
 
 ### 1. 이미지 넣기
 
-Tripo 뷰어에서 에셋을 캡처해 `web/images/asset.png` 로 저장한다.
+`web/images/` 에 두 개가 들어 있다.
+
+| 파일 | 설명 |
+|------|------|
+| `asset-cutout.png` | 배경을 미리 제거해 둔 버전. **기본값으로 이걸 쓴다** |
+| `asset.png` | Tripo 캡처 원본 (배경 `#EBEBEB`) |
+
+기본 설정은 `asset-cutout.png` 를 읽고 배경 제거를 건너뛰므로,
+**`index.html` 을 더블클릭해서 열어도 바로 동작한다.**
+
+다른 에셋으로 바꿀 때는 새로 캡처한 이미지를 `web/images/asset.png` 로 저장하고
+`app.js` 에서 아래처럼 바꾼 뒤 로컬 서버로 열면 된다.
+
+```js
+assetUrl: './images/asset.png',
+removeBackground: true,
+```
 
 배경이 단색(흰색·회색 등)이면 페이지가 **브라우저에서 자동으로 배경을 지운다.**
 별도 프로그램이나 배경 제거 사이트가 필요 없다.
@@ -37,8 +53,10 @@ Tripo 뷰어에서 에셋을 캡처해 `web/images/asset.png` 로 저장한다.
 
 ### 2. 실행
 
-이미지 픽셀을 읽어야 하므로 **로컬 서버로 열어야 한다.** `index.html` 을 더블클릭하면
-브라우저 보안 정책 때문에 배경 제거가 동작하지 않는다.
+기본 설정(`asset-cutout.png`)이면 `index.html` 을 그냥 열면 된다.
+
+배경 제거를 켤 때만 로컬 서버가 필요하다. 이미지 픽셀을 읽어야 하는데,
+파일을 더블클릭해 열면 브라우저 보안 정책이 이를 막기 때문이다.
 
 ```bash
 cd web
@@ -59,7 +77,7 @@ Node가 있으면 `npx serve web` 도 동일하다.
 | `ease` | 따라오는 속도. 작을수록 느긋하고 부드럽다 (0.02~0.15) |
 | `floatAmp` / `floatSpeed` | 둥둥 떠다니는 진폭과 속도 |
 | `swayDeg` | 좌우로 흔들리는 각도 |
-| `removeBackground` | 배경 자동 제거 on/off |
+| `removeBackground` | 배경 자동 제거 on/off (`asset-cutout.png` 쓸 때는 off) |
 
 에셋 크기는 `app.css` 의 `#asset { width: ... }`, 제목 문구는 각 HTML 의
 `.wordmark` 에서 바꾼다.
