@@ -310,18 +310,18 @@ h2.sect .strike{color:var(--before);text-decoration:line-through;text-decoration
 
 /* ── 세로 타임라인 ── */
 .tl{position:relative}
-.tl:before{content:"";position:absolute;left:150px;top:30px;bottom:0;width:1px;background:var(--line)}
-.tlrow{display:grid;grid-template-columns:150px 1fr;position:relative}
-.tlrow:before{content:"";position:absolute;left:146px;top:26px;width:9px;height:9px;
+.tl:before{content:"";position:absolute;left:172px;top:30px;bottom:0;width:1px;background:var(--line)}
+.tlrow{display:grid;grid-template-columns:172px 1fr;position:relative}
+.tlrow:before{content:"";position:absolute;left:168px;top:26px;width:9px;height:9px;
   border-radius:2px;background:var(--mute)}
 .tlrow.hard:before{background:var(--after)}
-.tlrow.dday:before{left:144px;top:24px;width:13px;height:13px;background:var(--after)}
+.tlrow.dday:before{left:166px;top:24px;width:13px;height:13px;background:var(--after)}
 .tlrow:last-child .c:after{content:"";position:absolute;left:-5px;top:35px;bottom:0;
   width:11px;background:var(--paper)}
 .tlrow .k{padding:22px 30px 26px 0;text-align:right}
-.tlrow .k .w{font-size:21.5px;font-weight:800;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.tlrow .k .w{font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.38;color:var(--ink)}
 .tlrow.hard .k .w,.tlrow.dday .k .w{color:var(--after)}
-.tlrow .k .rng{font-size:14.5px;font-weight:600;color:var(--ink-2);margin-top:7px;line-height:1.5}
+.tlrow .k .mw{font-size:15px;font-weight:700;color:var(--ink-2);margin-top:7px;line-height:1.45}
 .tlrow .k .ph{font-size:14px;font-weight:600;color:var(--mute);margin-top:3px;line-height:1.4;white-space:nowrap}
 .tlrow .k .st{font-size:14px;font-weight:600;color:var(--mute);line-height:1.4;white-space:nowrap}
 .tlrow .c{position:relative;padding:22px 0 26px 30px}
@@ -450,12 +450,12 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
 
     <div class="blk">
       <h3>주 단위 실행 일정</h3>
-      <p class="h3note">주차는 월요일 시작 기준 · 「법정 기한」 항목은 지연 시 종료일 순연이 불가피하다</p>
+      <p class="h3note">각 주는 월요일 시작 기준이며, 괄호 없는 보조 표기는 해당 주 목요일이 속한 달의 주차 · 「법정 기한」 항목은 지연 시 종료일 순연이 불가피하다</p>
       <div class="tl">
         <div class="tlrow">
           <div class="k">
-            <div class="w">W36</div>
-            <div class="rng">09.04 (금)</div>
+            <div class="w">09.04 (금)</div>
+            <div class="mw">9월 1째주</div>
             <div class="ph">D−42</div>
             <div class="st">단계 0</div>
           </div>
@@ -469,8 +469,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow hard">
           <div class="k">
-            <div class="w">W37</div>
-            <div class="rng">09.07 (월) ~ 09.13 (일)</div>
+            <div class="w">09.07 (월) ~ 09.13 (일)</div>
+            <div class="mw">9월 2째주</div>
             <div class="ph">D−39 ~ D−33</div>
             <div class="st">단계 0 → 1</div>
           </div>
@@ -488,8 +488,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow hard">
           <div class="k">
-            <div class="w">W38</div>
-            <div class="rng">09.14 (월) ~ 09.20 (일)</div>
+            <div class="w">09.14 (월) ~ 09.20 (일)</div>
+            <div class="mw">9월 3째주</div>
             <div class="ph">D−32 ~ D−26</div>
             <div class="st">단계 1</div>
           </div>
@@ -504,8 +504,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W39</div>
-            <div class="rng">09.21 (월) ~ 09.27 (일)</div>
+            <div class="w">09.21 (월) ~ 09.27 (일)</div>
+            <div class="mw">9월 4째주</div>
             <div class="ph">D−25 ~ D−19</div>
             <div class="st">단계 1 → 2</div>
           </div>
@@ -520,8 +520,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W40</div>
-            <div class="rng">09.28 (월) ~ 10.04 (일)</div>
+            <div class="w">09.28 (월) ~ 10.04 (일)</div>
+            <div class="mw">10월 1째주</div>
             <div class="ph">D−18 ~ D−12</div>
             <div class="st">단계 2</div>
           </div>
@@ -538,8 +538,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W41</div>
-            <div class="rng">10.05 (월) ~ 10.11 (일)</div>
+            <div class="w">10.05 (월) ~ 10.11 (일)</div>
+            <div class="mw">10월 2째주</div>
             <div class="ph">D−11 ~ D−5</div>
             <div class="st">단계 2 → 3</div>
           </div>
@@ -555,8 +555,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow dday">
           <div class="k">
-            <div class="w">W42</div>
-            <div class="rng">10.12 (월) ~ 10.18 (일)</div>
+            <div class="w">10.12 (월) ~ 10.18 (일)</div>
+            <div class="mw">10월 3째주</div>
             <div class="ph">D−4 ~ D+2</div>
             <div class="st">단계 3 → 4</div>
           </div>
@@ -573,8 +573,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W43</div>
-            <div class="rng">10.19 (월) ~ 10.25 (일)</div>
+            <div class="w">10.19 (월) ~ 10.25 (일)</div>
+            <div class="mw">10월 4째주</div>
             <div class="ph">D+1 ~ D+7</div>
             <div class="st">단계 5</div>
           </div>
@@ -588,8 +588,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W44 ~ W46</div>
-            <div class="rng">10.26 (월) ~ 11.15 (일)</div>
+            <div class="w">10.26 (월) ~ 11.15 (일)</div>
+            <div class="mw">10월 5째주 ~ 11월 2째주</div>
             <div class="ph">D+8 ~ D+28</div>
             <div class="st">단계 5</div>
           </div>
@@ -604,8 +604,8 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         </div>
         <div class="tlrow">
           <div class="k">
-            <div class="w">W47</div>
-            <div class="rng">11.16 (월) ~</div>
+            <div class="w">11.16 (월)</div>
+            <div class="mw">11월 3째주</div>
             <div class="ph">D+31</div>
             <div class="st">단계 5</div>
           </div>
@@ -650,19 +650,19 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
               <th>법정 고지기간<br>미충족</th>
               <td><span class="grade best">중점 관리</span><br>준법 검토 또는 팝업 개발 지연</td>
               <td>감독당국 검사 지적 및 민원 사유. 종료일 순연 시 전환 작업 일정 전면 재조정</td>
-              <td>W37(09.11) 개시로 마감선 대비 5일 버퍼 확보. 09.16 시점 미개시 판단 시 <b>즉시 순연 결정 상신</b></td>
+              <td>09.11 개시로 마감선 대비 5일 버퍼 확보. 09.16 시점 미개시 판단 시 <b>즉시 순연 결정 상신</b></td>
             </tr>
             <tr>
               <th>예약 · 조건부주문<br>미집행</th>
               <td><span class="grade best">중점 관리</span><br>종료 후 등록 주문의 집행 근거 상실</td>
               <td>매매 기회 상실을 이유로 한 손해배상 주장 및 분쟁 소지</td>
-              <td>W40(10.02) 개별 고지 후 W42(10.15) 장 종료 후 일괄 취소, <b>취소 내역 개별 통지로 증빙 확보</b></td>
+              <td>10.02 개별 고지 후 10.15 장 종료 후 일괄 취소, <b>취소 내역 개별 통지로 증빙 확보</b></td>
             </tr>
             <tr>
               <th>WTS 단독 이용 · 고령<br>고객 주문 수단 상실</th>
               <td><span class="grade best">중점 관리</span><br>타 채널 이용 이력이 없어 공지 팝업만으로 전환 미담보</td>
               <td>종료 직후 첫 거래일(10.19) 민원 집중, 고령 고객 이탈</td>
-              <td>W40부터 유선 개별 접촉 및 전환 완료 추적. <b>W42(10.12) 잔여 명부 재추출 후 최종 접촉</b></td>
+              <td>09.30부터 유선 개별 접촉 및 전환 완료 추적. <b>10.12 잔여 명부 재추출 후 최종 접촉</b></td>
             </tr>
             <tr>
               <th>휴장 집중에 따른<br>고지 노출 부족</th>
@@ -674,7 +674,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
               <th>대체 채널<br>동시접속 부하</th>
               <td><span class="grade ok">상시 관리</span><br>WTS 이용자 이관에 따른 급증</td>
               <td>종료 직후 MTS · 신 HTS 응답 지연, 주문 지연 민원 확대</td>
-              <td>W40(10.02) 최대 동접 기준 부하 테스트, 종료 직후 1주 인프라 선제 증설</td>
+              <td>10.02 최대 동접 기준 부하 테스트, 종료 직후 1주 인프라 선제 증설</td>
             </tr>
             <tr>
               <th>언론 · 온라인<br>확산</th>
@@ -686,7 +686,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
               <th>법인 고객<br>계약 조건 충돌</th>
               <td><span class="grade hold">모니터링</span><br>계약서 채널 조항 명시 여부</td>
               <td>개별 계약 변경 절차 소요로 해당 고객 종료 시점 이연</td>
-              <td>W37 명부 추출 시 계약 조항 병행 검토, 해당 고객은 법무팀 검토 후 개별 합의</td>
+              <td>09.07 명부 추출 시 계약 조항 병행 검토, 해당 고객은 법무팀 검토 후 개별 합의</td>
             </tr>
           </tbody>
         </table>
@@ -699,7 +699,7 @@ ul.acts li .grade{margin-bottom:0;margin-right:7px;vertical-align:1px}
         <strong>보고 전 확인이 필요한 사항</strong>
         <ul class="rep">
           <li>전자금융거래 약관 변경에 따른 <b>시행 1개월 전 고지 의무의 적용 여부</b> — 준법감시부 · 법무팀 최종 확인. 채널 폐지가 약관 변경에 해당하는지 여부가 09.16 고지 마감선의 근거가 된다</li>
-          <li>고객 규모 및 콜센터 증원 소요 인건비 — W37(09.07) 명부 추출 후 수치 확정 및 본 계획 보완</li>
+          <li>고객 규모 및 콜센터 증원 소요 인건비 — 09.07 명부 추출 후 수치 확정 및 본 계획 보완</li>
           <li>주관 부서명 — 실제 조직도 기준으로 수정</li>
           <li>종료 시각(10.16 18:00) 및 리다이렉트 유지 기간(안 6개월) — IT운영부 확인 후 확정</li>
         </ul>
